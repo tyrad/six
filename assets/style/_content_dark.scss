@@ -1,0 +1,50 @@
+@mixin content_dark {
+  color: #dadada;
+  background-color: #212121;
+
+  .content {
+    article strong {
+      color: #dadada !important;
+    }
+
+    .list {
+      ul {
+        li {
+          .title {
+            color: $fg-color-dark;
+            &:hover,
+            &:focus {
+              color: $link-color-dark;
+            }
+          }
+        }
+      }
+    }
+
+    .centered {
+      .about {
+        ul {
+          li {
+            a {
+              color: $fg-color-dark;
+              &:hover,
+              &:focus {
+                color: $link-color-dark;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+main.colorscheme-dark {
+  @include content_dark();
+}
+
+main.colorscheme-auto {
+  @media (prefers-color-scheme: dark) {
+    @include content_dark();
+  }
+}

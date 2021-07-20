@@ -114,3 +114,15 @@ selection)
 ✨  Done in 402.25s.
  
 ```
+
+
+https://www.nuxtjs.cn/guide/installation
+
+
+yarn run generate
+
+`node-sass assets/styles/main.scss static/main.css`
+
+如果有引文件的需求:
+`node-sass assets/style/coder.scss  static/coder.css --output-style compressed`
+`node-sass assets/style/coder-dark.scss  static/coder-dark.min.css --output-style compressed`

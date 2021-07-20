@@ -1,0 +1,59 @@
+@mixin base_dark {
+  color: $fg-color-dark;
+  background-color: $bg-color-dark;
+
+  a {
+    color: $link-color-dark;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: $alt-fg-color-dark;
+  }
+
+  code {
+    background-color: $alt-bg-color-dark;
+    color: $fg-color-dark;
+  }
+
+  pre {
+    code {
+      background-color: inherit;
+      color: inherit;
+    }
+  }
+
+  blockquote {
+    border-left: 2px solid $alt-bg-color-dark;
+  }
+
+  table td,
+  table th {
+    border: 2px solid $alt-fg-color-dark;
+  }
+
+  blockquote {
+    border-left: 4px solid #424242;
+  }
+  #TableOfContents a {
+    color: #dadada;
+  }
+
+  #TableOfContents a.highlighted {
+    color: #79aae6;
+  }
+}
+
+main.colorscheme-dark {
+  @include base_dark();
+}
+
+main.colorscheme-auto {
+  @media (prefers-color-scheme: dark) {
+    @include base_dark();
+  }
+}

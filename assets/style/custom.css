@@ -1,0 +1,76 @@
+.container {
+  max-width: 1100px !important;
+  width: 80%;
+}
+
+.colorscheme-dark .navigation .navigation-list .navigation-item .dropdown-content {
+  background-color: #212121;
+}
+
+.colorscheme-dark pre {
+  color: #333;
+}
+
+
+.wiki {
+  width: 100% !important;
+  max-width: 100% !important;
+  /*display: flex;*/
+}
+
+.wiki #body-wrapper {
+  width: 100%;
+}
+
+.wiki .post {
+  max-width: 100% !important;
+}
+
+.wiki .wiki-cate-aside {
+  font-weight: 400;
+  display: inline;
+  float: left;
+  visibility: visible;
+  font-size: 13px;
+  width: 240px;
+  padding: 0 20px 20px;
+}
+
+.wiki .wiki-cate-aside ul {
+  margin: 0;
+}
+
+.wiki .wiki-cate-aside a {
+  font-size: 13px;
+  color: #555555;
+  font-weight: 400;
+}
+
+.wiki .wiki-cate-aside ol,
+.wiki .wiki-cate-aside ul {
+  list-style: none;
+  padding-left: 20px;
+}
+
+.wiki-index {
+  flex: 1;
+  margin-top: 20px;
+}
+
+#articleWikiWrap {
+  margin-left: 240px;
+}
+
+#articleWikiAside {
+}
+
+/**iphone6*/
+@media only screen and (max-width: 900px) {
+  #articleWikiWrap {
+    margin-left: 0;
+  }
+
+  #articleWikiAside {
+    display: none;
+  }
+}

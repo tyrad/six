@@ -119,10 +119,20 @@ selection)
 https://www.nuxtjs.cn/guide/installation
 
 
-yarn run generate
+生成静态页面 yarn run generate
+
 
 `node-sass assets/styles/main.scss static/main.css`
 
 如果有引文件的需求:
 `node-sass assets/style/coder.scss  static/coder.css --output-style compressed`
 `node-sass assets/style/coder-dark.scss  static/coder-dark.min.css --output-style compressed`
+
+
+https://nuxtjs.org/blog/creating-blog-with-nuxt-content
+
+可获取全部文件
+https://zh.nuxtjs.org/blog/creating-blog-with-nuxt-content#list-all-the-blog-posts
+
+如何使用Nuxt建立个人博客
+https://www.houzhenni.com/blog/nuxt-blog-static-website

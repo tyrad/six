@@ -1,12 +1,10 @@
 <template>
-  <div>
-    to
-  </div>
+
 </template>
 
 <script>
 export default {
-  name: "to"
+  name: "rsa"
 }
 </script>
 

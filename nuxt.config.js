@@ -23,6 +23,7 @@ export default {
   css: [
     '@/assets/style/coder.scss',
     '@/assets/style/coder-dark.scss',
+    '@/assets/style/custom.css',
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -40,6 +41,7 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxt/content',
     ['nuxt-fontawesome', {
       component: 'fa',
       imports: [

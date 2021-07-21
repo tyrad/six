@@ -9,7 +9,7 @@
       <!--  drop menu  -->
       <input type="checkbox" id="menu-toggle" />
       <label class="menu-button float-right" for="menu-toggle">
-        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
+        <fa :icon="['fas', 'bars']" />
       </label>
 
       <ul class="navigation-list">
@@ -20,11 +20,7 @@
           :key="item.name"
         >
           <a class="navigation-link" :href="item.path">{{ item.name }}</a>
-          <i
-            class="fa fa-angle-down"
-            v-if="item.children && item.children.length > 0"
-          />
-
+          <fa :icon="['fas', 'angle-down']" v-if="item.children && item.children.length > 0"/>
           <ul
             class="dropdown-content"
             v-if="item.children && item.children.length > 0"
@@ -42,59 +38,41 @@
   </nav>
 </template>
 
-<script lang="ts">
+<script>
 
-import Vue from 'vue'
+import routerData from '../assets/data/router.js'
 
-export default Vue.extend({
+export default {
   name: 'BlogHeader',
-  data() {
+  data () {
     return {
       siteName: 'MistJ',
-      routerItems: [
-        {
-          name: '测试',
-          path: '/to'
-        },
-        {
-          name: '测试1',
-          path: '/to'
-        },
-        {
-          name: '测试2',
-          path: '/to'
-        },
-        {
-          name: '测试3',
-          path: '/to'
-        },
-      ],
+      routerItems:routerData,
     }
   },
   methods: {
-    darkModeChanged() {
+    darkModeChanged () {
       this.$nuxt.$emit('darkModeChanged')
     },
   },
-  created() {
-    // this.routerItems = this.$router.options.routes.filter((item) => {
-    //   return item.name && item.name === "Blog"
-    // })[0].children
-    this.$router;
-    return
-    // this.$router.options.routes.forEach(route => {
-    //   this.items.push({
-    //     name: route.name
-    //     , path: route.path
-    //   })
-    // })
+  created () {
+    // if (!this.$router || !this.$router.options || !this.$router.options.routes) {
+    //   return;
+    // }
+    // for (const route of this.$router.options.routes) {
+    //   if (route.path === '/' && route.children) {
+    //     for (const sub of route.children) {
+    //       this.routerItems = route.children;
+    //       break
+    //     }
+    //   }
+    // }
   },
-})
+}
 
 </script>
 
 <style scoped lang="scss">
-  @import "@/assets/style/variables";
   @import "@/assets/style/header/navigation";
   @import "@/assets/style/header/navigation_dark";
   /*  巧妙的使用 input+label  结合css,控制显示隐藏，没有用到一行代码 */

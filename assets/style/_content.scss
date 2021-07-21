@@ -168,7 +168,9 @@
     li pre code,
     p pre code,
     pre {
-      background-color: transparent;
+      //code background
+      //background-color: transparent;
+      background-color: white;
       border: none;
     }
 
@@ -373,7 +375,7 @@
     }
 
     .post-meta {
-      i {
+      .fa {
         text-align: center;
         width: 1.6rem;
         margin-left: 0;

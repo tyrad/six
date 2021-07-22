@@ -1,7 +1,6 @@
 <template>
   <section class="container post">
     <article>
-      <!--  模板  -->
       <header>
         <div class="post-title">
           <h1 class="title">{{ article.title }}</h1>
@@ -18,20 +17,19 @@
           <div class="categories">
             <fa class="fa" :icon="['fas', 'folder']" />
             <span :key="index" v-for="(item, index) of article.categories">
-              <a href="/categories/%e8%bd%af%e4%bb%b6/"> {{ item }} </a>
-              <span v-if="index != article.categories.length - 1" class="separator">•</span>
+              <a :href="`/categories/${item}/`"> {{ item }} </a>
+              <span v-if="index !== article.categories.length - 1" class="separator">•</span>
             </span>
           </div>
           <div class="tags">
             <fa class="fa" :icon="['fas', 'tag']" />
             <span :key="index" v-for="(tag, index) of article.tags">
-              <a href="/categories/%e8%bd%af%e4%bb%b6/"> {{ tag }} </a>
-              <span v-if="index != article.tags.length - 1" class="separator">•</span>
+              <a :href="`/tags/${tag}/`"> {{ tag }} </a>
+              <span v-if="index !== article.tags.length - 1" class="separator">•</span>
             </span>
           </div>
         </div>
       </header>
-
       <div style="width: 100%;">
         <aside ref="body-wrapper" id="body-wrapper">
           <div id="contents" class="body-content co-width-10">
@@ -39,7 +37,7 @@
           </div>
           <div class="sidebar co-width-2" style="padding-left: 12px;">
             <div ref="toc-slider" id="toc-slider" class="toc-fixed">
-              <nav id="TableOfContents" v-if="showToc">
+              <nav id="TableOfContents" v-show="tocVisible">
                 <div>
                   <ul>
                     <li v-for="link of article.toc" :key="link.id"
@@ -69,20 +67,34 @@ export default {
     const article = await $content('articles', params.title).fetch()
     return { article }
   },
-  data(){
+  data () {
     return {
-      showToc: false
+      pageLoaded: false
+    }
+  },
+  computed: {
+    tocVisible () {
+      const hideToc = !this.article || !(this.article.hideToc === true) || (!this.article.toc || this.article.toc.length === 0) || false;
+      return hideToc && this.pageLoaded;
+    },
+    anchor () {
+      let hash = this.$route.hash;
+      if (hash && hash.split("#").length > 0) {
+        return decodeURI(hash.split("#")[1]);
+      } else {
+        return ''
+      }
     }
   },
   created () {
     this.$nextTick(() => {
       const toc = this.$refs["toc-slider"];
-      if (!toc){
+      if (!toc) {
         return;
       }
       const topWrapper = this.$refs["body-wrapper"];
       if (topWrapper) {
-        this.showToc = true;
+        this.pageLoaded = true;
         const topWrapperOffsetTop = this.$refs["body-wrapper"].offsetTop;
         const updateLayout = (e) => {
           const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -95,7 +107,42 @@ export default {
         window.addEventListener("scroll", updateLayout);
         updateLayout();
       }
+      this.updateScroll(toc);
     })
+  },
+  methods: {
+    updateScroll (toc) {
+      window.onload = (e) => {
+        let orgHtmls = document.querySelectorAll("h1,h2,h3,h4,h5");
+        window.addEventListener("scroll", function (e) {
+          let scrollTop = window.pageYOffset;
+          for (let i = 0; i < orgHtmls.length; i++) {
+            const seg = orgHtmls[i];
+            let nextSeg = orgHtmls.length > i + 1 ? orgHtmls[i + 1] : null;
+            let currentTag = null;
+            if (nextSeg) {
+              if (scrollTop > seg.offsetTop - 40 && scrollTop < nextSeg.offsetTop) {
+                currentTag = seg;
+              }
+            } else {
+              if (scrollTop > seg.offsetTop - 40) {
+                currentTag = seg;
+              }
+            }
+            if (currentTag) {
+              let element = toc.querySelectorAll("a");
+              for (const ele of element) {
+                ele.classList.remove("highlighted");
+              }
+              let ele2 = toc.querySelector(`a[href='#${(seg.id)}']`)
+              if (ele2) {
+                ele2.classList.add("highlighted");
+              }
+            }
+          }
+        });
+      };
+    }
   }
 }
 </script>

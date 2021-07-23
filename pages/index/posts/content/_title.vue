@@ -10,7 +10,7 @@
               <span class="posted-on">
                 <fa class="fa" :icon="['fas', 'calendar-alt']" />
                 <time datetime="2020-06-25 11:32:22">
-                  {{ article.date }}
+                  {{ article.date | toParseTime }}
                 </time>
               </span>
           </div>
@@ -41,6 +41,7 @@
                 <div>
                   <ul>
                     <li v-for="link of article.toc" :key="link.id"
+                        :style="{'text-indent': `${(link.depth - 1) * 8}px`}"
                         :class="{ 'py-2': link.depth === 2, 'ml-2 pb-2': link.depth === 3 }">
                       <a :href="`#${link.id}`"> {{ link.text }} </a>
                     </li>
@@ -59,6 +60,9 @@
 </template>
 
 <script>
+
+import { parseTime } from '@/utils'
+
 export default {
   validate ({ params }) {
     return !/^\d+$/.test(params.title)
@@ -84,6 +88,11 @@ export default {
       } else {
         return ''
       }
+    }
+  },
+  filters: {
+    toParseTime(value) {
+      return parseTime(new Date(value).getTime(), '{y}-{m}-{d} {h}:{i}')
     }
   },
   created () {
@@ -113,12 +122,12 @@ export default {
   methods: {
     updateScroll (toc) {
       window.onload = (e) => {
-        let orgHtmls = document.querySelectorAll("h1,h2,h3,h4,h5");
+        let orgHtml = document.querySelectorAll("h1,h2,h3,h4,h5");
         window.addEventListener("scroll", function (e) {
           let scrollTop = window.pageYOffset;
-          for (let i = 0; i < orgHtmls.length; i++) {
-            const seg = orgHtmls[i];
-            let nextSeg = orgHtmls.length > i + 1 ? orgHtmls[i + 1] : null;
+          for (let i = 0; i < orgHtml.length; i++) {
+            const seg = orgHtml[i];
+            let nextSeg = orgHtml.length > i + 1 ? orgHtml[i + 1] : null;
             let currentTag = null;
             if (nextSeg) {
               if (scrollTop > seg.offsetTop - 40 && scrollTop < nextSeg.offsetTop) {

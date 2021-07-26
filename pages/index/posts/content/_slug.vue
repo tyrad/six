@@ -31,6 +31,7 @@
         </div>
       </header>
       <div style="width: 100%;">
+        <!--  <pre> {{ article }} </pre>-->
         <aside ref="body-wrapper" id="body-wrapper">
           <div id="contents" class="body-content co-width-10">
             <nuxt-content :document="article" />
@@ -55,21 +56,26 @@
           </div>
         </aside>
       </div>
+
+      ----
+      <prev-next :prev="prev" :next="next" />
+
+
     </article>
   </section>
 </template>
 
 <script>
 
-import { parseTime } from '@/utils'
-
 export default {
-  validate ({ params }) {
-    return !/^\d+$/.test(params.title)
-  },
   async asyncData ({ $content, params }) {
-    const article = await $content('articles', params.title).fetch()
-    return { article }
+    const article = await $content('articles', params.slug).fetch()
+    const [prev, next] = await $content('articles')
+      .only(['title', 'slug'])
+      .sortBy('date', 'asc')
+      .surround(params.slug)
+      .fetch()
+    return { article, prev, next }
   },
   data () {
     return {
@@ -77,26 +83,31 @@ export default {
     }
   },
   computed: {
+    slug() {
+      return this.article.slug;
+    },
     tocVisible () {
       const hideToc = !this.article || !(this.article.hideToc === true) || (!this.article.toc || this.article.toc.length === 0) || false;
       return hideToc && this.pageLoaded;
-    },
-    anchor () {
-      let hash = this.$route.hash;
-      if (hash && hash.split("#").length > 0) {
-        return decodeURI(hash.split("#")[1]);
-      } else {
-        return ''
-      }
+    }
+  },
+  watch: {
+    slug() {
+      this.handleTocFixed();
     }
   },
   filters: {
-    toParseTime(value) {
-      return parseTime(new Date(value).getTime(), '{y}-{m}-{d} {h}:{i}')
+    toParseTime (value) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' }
+      return new Date(value).toLocaleDateString('en', options)
     }
   },
-  created () {
-    this.$nextTick(() => {
+  mounted () {
+    //this.$nextTick(() => {})
+    this.handleTocFixed();
+  },
+  methods: {
+    handleTocFixed () {
       const toc = this.$refs["toc-slider"];
       if (!toc) {
         return;
@@ -117,9 +128,7 @@ export default {
         updateLayout();
       }
       this.updateScroll(toc);
-    })
-  },
-  methods: {
+    },
     updateScroll (toc) {
       window.onload = (e) => {
         let orgHtml = document.querySelectorAll("h1,h2,h3,h4,h5");

@@ -52,7 +52,15 @@ export default {
       ]
     }]
   ],
-
+  //for  @nuxt-content
+  content: {
+    markdown: {
+      prism: {
+        // all theme https://github.com/PrismJS/prism-themes
+        theme: 'prism-themes/themes/prism-coldark-dark.css'
+      }
+    }
+  },
   // '@nuxtjs/style-resources'
   styleResources: {
     scss: [

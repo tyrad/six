@@ -57,9 +57,7 @@
         </aside>
       </div>
 
-      ----
       <prev-next :prev="prev" :next="next" />
-
 
     </article>
   </section>
@@ -67,9 +65,16 @@
 
 <script>
 
+// 动态路由 https://content.nuxtjs.org/snippets/#dynamic-routing
+// https://github.com/nuxt/content/issues/436
+
 export default {
   async asyncData ({ $content, params }) {
-    const article = await $content('articles', params.slug).fetch()
+    console.log(params);
+    //const article = await $content('articles/go', params.slug).fetch()
+    const article = await $content('articles', params.slug)
+      // .where({ dir: `/articles/go`})
+      .fetch()
     const [prev, next] = await $content('articles')
       .only(['title', 'slug'])
       .sortBy('date', 'asc')
@@ -83,7 +88,7 @@ export default {
     }
   },
   computed: {
-    slug() {
+    slug () {
       return this.article.slug;
     },
     tocVisible () {
@@ -92,18 +97,11 @@ export default {
     }
   },
   watch: {
-    slug() {
+    slug () {
       this.handleTocFixed();
     }
   },
-  filters: {
-    toParseTime (value) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' }
-      return new Date(value).toLocaleDateString('en', options)
-    }
-  },
   mounted () {
-    //this.$nextTick(() => {})
     this.handleTocFixed();
   },
   methods: {

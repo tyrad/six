@@ -1,7 +1,9 @@
 <template>
   <nav class="navigation">
     <section class="container">
-      <a class="navigation-title" href="/"> {{ siteName }} </a>
+      <NuxtLink class="navigation-title" to="/">
+        {{ siteName }}
+      </NuxtLink>
       <span id="dark-mode-toggle" class="float-right" @click="darkModeChanged">
         <fa :icon="['fas', 'adjust']" style="cursor: pointer;" />
       </span>
@@ -19,14 +21,16 @@
           v-for="item of routerItems"
           :key="item.name"
         >
-          <a class="navigation-link" :href="item.path">{{ item.name }}</a>
-          <fa :icon="['fas', 'angle-down']" v-if="item.children && item.children.length > 0"/>
+          <nuxt-link class="navigation-link"
+                     :to="{name: item.path , params: item.params }"> {{ item.name }}
+          </nuxt-link>
+          <fa :icon="['fas', 'angle-down']" v-if="item.children && item.children.length > 0" />
           <ul
             class="dropdown-content"
             v-if="item.children && item.children.length > 0"
           >
             <li v-for="subItem in item.children" :key="subItem.path">
-              <nuxt-link :to="subItem.path"> {{ subItem.name }}</nuxt-link>
+              <nuxt-link :to="{name: subItem.path}"> {{ subItem.name }}</nuxt-link>
             </li>
           </ul>
         </li>
@@ -47,7 +51,7 @@ export default {
   data () {
     return {
       siteName: 'MistJ',
-      routerItems:routerData,
+      routerItems: routerData,
     }
   },
   methods: {
@@ -75,5 +79,5 @@ export default {
 <style scoped lang="scss">
   @import "@/assets/style/header/navigation";
   @import "@/assets/style/header/navigation_dark";
-  /*  巧妙的使用 input+label  结合css,控制显示隐藏，没有用到一行代码 */
+  /*  巧妙的使用 input+label  结合css,控制显示隐藏，没有用到一行js代码 */
 </style>

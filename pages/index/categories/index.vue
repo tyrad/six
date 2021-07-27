@@ -1,9 +1,13 @@
 <template>
   <List title="Categories">
     <ul>
-      <li v-for="item of sortedCategories" :key="item.title">
-        <span class="date">{{ item.date | toParseTime}}</span>
-        <NuxtLink class="title" :to="{ name: 'index-posts-content-slug', params: { slug: item.slug } }">
+      <li v-for="item of sortedCategories"
+          :key="item.title">
+        <span class="date">
+          {{ item.date | toParseTime}}
+        </span>
+        <NuxtLink class="title"
+                  :to="{ name: 'index-categories-slug', params: { slug: item.name } }">
           {{ item.name }}({{ item.count }})
         </NuxtLink>
       </li>
@@ -52,23 +56,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .tag-wrap {
-    text-align: center;
-    margin: 2rem;
-
-    .tag {
-      font-size: 1.8rem;
-      flex: 2;
-      color: #333;
-      font-family: Lato, Helvetica, sans-serif;
-      font-weight: 700;
-      display: inline-block;
-    }
-
-    .tag + .tag {
-      margin-left: 2rem;
-      margin-bottom: 1rem;
-    }
-  }
 </style>
 

@@ -1,9 +1,12 @@
 <template>
   <List title="Tags">
     <div class="tag-wrap">
-      <a class="tag" v-for="item of sortedTags" :key="item.name">
+      <NuxtLink class="tag title"
+                v-for="item of sortedTags"
+                :key="item.name"
+                :to="{ name: 'index-tags-slug', params: { slug: item.name } }">
         {{ item.name }}({{ item.count }})
-      </a>
+      </NuxtLink>
     </div>
   </List>
 </template>
@@ -15,7 +18,6 @@ export default {
     const tags = await $content('articles', { deep: true })
       .only(['tags'])
       .fetch()
-    console.log(tags)
     return { tags }
   },
   computed: {
@@ -48,8 +50,7 @@ export default {
     .tag {
       font-size: 1.8rem;
       flex: 2;
-      color: #333;
-      font-family: Lato, Helvetica, sans-serif;
+      color: $fg-color;
       font-weight: 700;
       display: inline-block;
     }
@@ -57,6 +58,22 @@ export default {
     .tag + .tag {
       margin-left: 2rem;
       margin-bottom: 1rem;
+    }
+  }
+
+  @mixin tag_dark {
+    .tag {
+      color: $fg-color-dark
+    }
+  }
+
+  main.colorscheme-dark {
+    @include tag_dark()
+  }
+
+  main.colorscheme-auto {
+    @media (prefers-color-scheme: dark) {
+      @include tag_dark()
     }
   }
 </style>

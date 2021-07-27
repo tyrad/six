@@ -1,54 +1,55 @@
 export default [
   {
-    path: "/posts/1",
+    path: "index-posts-p",
     name: "Posts",
+    params: { p: 1 }
   },
   {
-    path: "/categories",
+    path: "index-categories",
     name: "Categories",
   },
   {
-    path: "/tags",
+    path: "index-tags",
     name: "Tags",
   },
   {
-    path: "/series",
+    path: "index-series",
     name: "Series",
   },
   {
-    path: "/wiki",
+    path: "index-wiki",
     name: "Wiki",
     children: [
       {
-        path: "/wiki/timeline",
+        path: "index-wiki-timeline",
         name: "Timeline",
         meta: {},
       },
       {
-        path: "/wiki/wiki",
+        path: "index-wiki-wiki",
         name: "wiki",
         meta: {},
       },
     ],
   },
   {
-    path: "/tools",
+    path: "index-tools",
     name: "Tools",
     children: [
       {
-        path: "/tools/json",
+        path: "index-tools-json",
         name: "JSON解析",
         meta: {},
       },
       {
-        path: "/tools/rsa",
+        path: "index-tools-rsa",
         name: "RSA测试",
         meta: {},
       },
     ],
   },
   {
-    path: "/about",
+    path: "index-about",
     name: "About",
     meta: {},
   }

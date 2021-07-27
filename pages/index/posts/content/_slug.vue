@@ -17,14 +17,14 @@
           <div class="categories">
             <fa class="fa" :icon="['fas', 'folder']" />
             <span :key="index" v-for="(item, index) of article.categories">
-              <a :href="`/categories/${item}/`"> {{ item }} </a>
+              <NuxtLink :to="{ name: 'index-categories-slug', params:{slug: item } }"> {{ item }} </NuxtLink>
               <span v-if="index !== article.categories.length - 1" class="separator">•</span>
             </span>
           </div>
           <div class="tags">
             <fa class="fa" :icon="['fas', 'tag']" />
             <span :key="index" v-for="(tag, index) of article.tags">
-              <a :href="`/tags/${tag}/`"> {{ tag }} </a>
+              <NuxtLink :to="{ name: 'index-tags-slug', params:{slug: tag } }"> {{ tag }} </NuxtLink>
               <span v-if="index !== article.tags.length - 1" class="separator">•</span>
             </span>
           </div>
@@ -56,9 +56,7 @@
           </div>
         </aside>
       </div>
-
       <prev-next :prev="prev" :next="next" />
-
     </article>
   </section>
 </template>

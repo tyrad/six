@@ -11,14 +11,18 @@
 
     <ul class="pagination">
       <li>
-        <a :href="`/posts/${pageNum - 1}`" v-if="pageNum !== 1">«</a>
+        <nuxt-link :to="{name: 'index-posts-p', params: {p: pageNum - 1} }"
+                   v-if="pageNum !== 1">«
+        </nuxt-link>
       </li>
       <li v-for="index in pageCount">
-        <a :href="`/posts/${index}`" v-if="index !== pageNum">{{ index }}</a>
+        <nuxt-link :to="{name: 'index-posts-p', params: {p: index }}" v-if="index !== pageNum">{{ index }}</nuxt-link>
         <span style="margin-right: 5px;" v-if="index === pageNum">{{ index }}</span>
       </li>
       <li>
-        <a :href="`/posts/${pageNum + 1}`" v-if="pageNum !== pageCount">»</a>
+        <nuxt-link :to="{name: 'index-posts-p', params: {p: pageNum + 1}}"
+                   v-if="pageNum !== pageCount">»
+        </nuxt-link>
       </li>
     </ul>
   </List>

@@ -29,6 +29,9 @@ export default {
     sortedCategories () {
       const allCate = {}
       for (const cate of this.categories) {
+        if (!cate.categories) {
+          continue
+        }
         for (const name of cate.categories) {
           const existed = allCate[name];
           if (existed) {

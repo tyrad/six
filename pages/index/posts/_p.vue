@@ -30,9 +30,8 @@ const pagination = {
       .limit(10)
       .fetch()
   },
-
   async getNumberOfPages ($content) {
-    return Math.ceil((await $content('articles').only([]).fetch()).length / 10)
+    return Math.ceil((await $content('articles', { deep: true }).only([]).fetch()).length / 10)
   },
 }
 
@@ -46,6 +45,7 @@ export default {
       pagination.getPostsOfPage($content, pageNum),
       pagination.getNumberOfPages($content),
     ]);
+    debugger
     return { articles, pageNum, pageCount }
   }
 }

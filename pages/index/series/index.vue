@@ -28,6 +28,9 @@ export default {
     sortedCategories () {
       const allSeries = {}
       for (const cate of this.series) {
+        if (!cate.series) {
+          continue
+        }
         for (const name of cate.series) {
           const existed = allSeries[name];
           if (existed) {

@@ -23,7 +23,7 @@ export default {
   computed: {
     sortedTags () {
       let tags = this.tags.map(item => {
-        return item.tags
+        return item.tags || []
       }).flat();
       const counts = {};
       tags.forEach(function (x) {

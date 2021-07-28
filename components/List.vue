@@ -3,7 +3,7 @@
     <h1 class="title" v-if="title">
       {{ title }}
     </h1>
-    <slot></slot>
+    <slot/>
   </section>
 </template>
 

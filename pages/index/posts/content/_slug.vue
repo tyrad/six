@@ -64,14 +64,17 @@
 <script>
 
 export default {
-  async asyncData ({ $content, params }) {
+  async asyncData ({ $content, params, error }) {
     //const article = await $content('articles/go', params.slug).fetch()
     //添加支持deep查询,注意:文件名称不能相同
     const articles = await $content('articles', { deep: true })
       .where({ slug: params.slug })
       .limit(1)
       .fetch();
-    const article = articles && articles.length > 0 ? articles[0] : {};
+    if (articles.length === 0) {
+      error({ statusCode: 404, message: '' });
+    }
+    const article = articles[0];
     const [prev, next] = await $content('articles', { deep: true })
       .only(['title', 'slug'])
       .sortBy('date', 'asc')

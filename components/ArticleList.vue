@@ -16,7 +16,7 @@
         </NuxtLink>
       </li>
     </ul>
-    <slot></slot>
+    <slot/>
   </section>
 </template>
 

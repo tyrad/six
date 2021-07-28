@@ -1,69 +1,43 @@
 <template>
   <section class="container post">
     <article>
-      <header>
-        <div class="post-title">
-          <h1 class="title">{{ article.title }}</h1>
+      <ArticleHeader :article="article" />
+      <aside ref="body-wrapper" id="body-wrapper">
+        <div id="contents"
+             :class="{'co-width-12': pageLoaded && !tocVisible }"
+             class="body-content co-width-10">
+          <nuxt-content :document="article" />
+          <prev-next :prev="prev" :next="next" />
         </div>
-        <div class="post-meta">
-          <div class="date">
-              <span class="posted-on">
-                <fa class="fa" :icon="['fas', 'calendar-alt']" />
-                <time datetime="2020-06-25 11:32:22">
-                  {{ article.date | toParseTime }}
-                </time>
-              </span>
-          </div>
-          <div class="categories" v-if="article.categories && article.categories.length > 0">
-            <fa class="fa" :icon="['fas', 'folder']" />
-            <span :key="index" v-for="(item, index) of article.categories">
-              <NuxtLink :to="{ name: 'index-categories-slug', params:{slug: item } }"> {{ item }} </NuxtLink>
-              <span v-if="index !== article.categories.length - 1" class="separator">•</span>
-            </span>
-          </div>
-          <div class="tags" v-if="article.tags && article.tags.length > 0">
-            <fa class="fa" :icon="['fas', 'tag']" />
-            <span :key="index" v-for="(tag, index) of article.tags">
-              <NuxtLink :to="{ name: 'index-tags-slug', params:{slug: tag } }"> {{ tag }} </NuxtLink>
-              <span v-if="index !== article.tags.length - 1" class="separator">•</span>
-            </span>
+        <div class="sidebar co-width-2"
+             style="padding-left: 12px;"
+             v-show="pageLoaded && tocVisible">
+          <div ref="toc-slider" class="toc-fixed">
+            <nav id="TableOfContents">
+              <ul>
+                <li v-for="link of article.toc" :key="link.id"
+                    :style="{'text-indent': `${(link.depth - 1) * 8}px`}"
+                    :class="{ 'py-2': link.depth === 2, 'ml-2 pb-2': link.depth === 3 }">
+                  <a :href="`#${link.id}`"> {{ link.text }} </a>
+                </li>
+              </ul>
+            </nav>
+            <a href="#" id="tap-to-top">
+              <fa :icon="['fas', 'arrow-up']" />
+            </a>
           </div>
         </div>
-      </header>
-      <div style="width: 100%;">
-        <!--  <pre> {{ article }} </pre>-->
-        <aside ref="body-wrapper" id="body-wrapper">
-          <div id="contents" class="body-content co-width-10">
-            <nuxt-content :document="article" />
-            <prev-next :prev="prev" :next="next" />
-          </div>
-          <div class="sidebar co-width-2" style="padding-left: 12px;">
-            <div ref="toc-slider" id="toc-slider" class="toc-fixed">
-              <nav id="TableOfContents" v-show="tocVisible">
-                <div>
-                  <ul>
-                    <li v-for="link of article.toc" :key="link.id"
-                        :style="{'text-indent': `${(link.depth - 1) * 8}px`}"
-                        :class="{ 'py-2': link.depth === 2, 'ml-2 pb-2': link.depth === 3 }">
-                      <a :href="`#${link.id}`"> {{ link.text }} </a>
-                    </li>
-                  </ul>
-                </div>
-              </nav>
-              <a href="#" id="tap-to-top" style="display: inline;">
-                <fa :icon="['fas', 'arrow-up']" />
-              </a>
-            </div>
-          </div>
-        </aside>
-      </div>
+      </aside>
     </article>
   </section>
 </template>
 
 <script>
 
+import ArticleHeader from "../../../../components/ArticleHeader"
+
 export default {
+  components: { ArticleHeader },
   async asyncData ({ $content, params, error }) {
     //const article = await $content('articles/go', params.slug).fetch()
     //添加支持deep查询,注意:文件名称不能相同
@@ -92,8 +66,8 @@ export default {
       return this.article.slug;
     },
     tocVisible () {
-      const hideToc = !this.article || !(this.article.hideToc === true) || (!this.article.toc || this.article.toc.length === 0) || false;
-      return hideToc && this.pageLoaded;
+      const hideToc = !this.article || this.article.hideToc === true || (!this.article.toc || this.article.toc.length === 0) || false;
+      return !hideToc;
     }
   },
   watch: {

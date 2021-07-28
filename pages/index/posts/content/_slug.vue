@@ -14,14 +14,14 @@
                 </time>
               </span>
           </div>
-          <div class="categories">
+          <div class="categories" v-if="article.categories && article.categories.length > 0">
             <fa class="fa" :icon="['fas', 'folder']" />
             <span :key="index" v-for="(item, index) of article.categories">
               <NuxtLink :to="{ name: 'index-categories-slug', params:{slug: item } }"> {{ item }} </NuxtLink>
               <span v-if="index !== article.categories.length - 1" class="separator">•</span>
             </span>
           </div>
-          <div class="tags">
+          <div class="tags" v-if="article.tags && article.tags.length > 0">
             <fa class="fa" :icon="['fas', 'tag']" />
             <span :key="index" v-for="(tag, index) of article.tags">
               <NuxtLink :to="{ name: 'index-tags-slug', params:{slug: tag } }"> {{ tag }} </NuxtLink>
@@ -35,6 +35,7 @@
         <aside ref="body-wrapper" id="body-wrapper">
           <div id="contents" class="body-content co-width-10">
             <nuxt-content :document="article" />
+            <prev-next :prev="prev" :next="next" />
           </div>
           <div class="sidebar co-width-2" style="padding-left: 12px;">
             <div ref="toc-slider" id="toc-slider" class="toc-fixed">
@@ -56,24 +57,22 @@
           </div>
         </aside>
       </div>
-      <prev-next :prev="prev" :next="next" />
     </article>
   </section>
 </template>
 
 <script>
 
-// 动态路由 https://content.nuxtjs.org/snippets/#dynamic-routing
-// https://github.com/nuxt/content/issues/436
-
 export default {
   async asyncData ({ $content, params }) {
-    console.log(params);
     //const article = await $content('articles/go', params.slug).fetch()
-    const article = await $content('articles', params.slug)
-      // .where({ dir: `/articles/go`})
-      .fetch()
-    const [prev, next] = await $content('articles')
+    //添加支持deep查询,注意:文件名称不能相同
+    const articles = await $content('articles', { deep: true })
+      .where({ slug: params.slug })
+      .limit(1)
+      .fetch();
+    const article = articles && articles.length > 0 ? articles[0] : {};
+    const [prev, next] = await $content('articles', { deep: true })
       .only(['title', 'slug'])
       .sortBy('date', 'asc')
       .surround(params.slug)

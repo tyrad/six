@@ -8,9 +8,6 @@
       上一篇{{ prev.title }}
     </NuxtLink>
     <span v-else>&nbsp;</span>
-
-    ------------------------
-
     <NuxtLink
       v-if="next"
       :to="{ name: 'index-posts-content-slug', params: { slug: next.slug } }"
@@ -39,5 +36,11 @@ export default {
 </script>
 
 <style scoped>
+  .flex {
+    display: flex;
+  }
 
+  .justify-between {
+    justify-content: space-between;
+  }
 </style>

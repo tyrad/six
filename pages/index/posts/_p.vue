@@ -1,14 +1,6 @@
 <template>
-  <List :title="'Posts'">
-    <ul>
-      <li v-for="item of articles" :key="item.title">
-        <span class="date">{{ item.date | toParseTime}}</span>
-        <NuxtLink class="title" :to="{ name: 'index-posts-content-slug', params: { slug: item.slug } }">
-          {{ item.title }}
-        </NuxtLink>
-      </li>
-    </ul>
-
+  <ArticleList title="Posts"
+               :articles="articles">
     <ul class="pagination">
       <li>
         <nuxt-link :to="{name: 'index-posts-p', params: {p: pageNum - 1} }"
@@ -25,11 +17,10 @@
         </nuxt-link>
       </li>
     </ul>
-  </List>
+  </ArticleList>
 </template>
 
 <script>
-
 const pagination = {
   getPostsOfPage ($content, page) {
     return $content('articles', { deep: true })

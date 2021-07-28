@@ -2,7 +2,7 @@
   <section class="container list">
     <h1 class="title" v-if="title">
       <NuxtLink v-if="preLink"
-                :to="{ name: preLink.path }">
+                :to="{ name: preLink.path}">
         {{ preLink.name }}
       </NuxtLink>
       {{ title }}
@@ -11,11 +11,12 @@
       <li v-for="item of articles" :key="item.title">
         <span class="date">{{ item.date | toParseTime}}</span>
         <NuxtLink class="title"
-                  :to="{ name: 'index-posts-content-slug', params: { slug: item.slug } }">
+                  :to="{ name: 'index-posts-content-slug', params: { slug: item.slug , path: item.path } }">
           {{ item.title }}
         </NuxtLink>
       </li>
     </ul>
+    <slot></slot>
   </section>
 </template>
 

@@ -3,7 +3,7 @@
     <article>
       <ArticleHeader :article="article" />
       <aside ref="body-wrapper" id="body-wrapper">
-        <div id="contents"
+        <div id="contents" ref="contents"
              :class="{'co-width-12': pageLoaded && !tocVisible }"
              class="body-content co-width-10">
           <nuxt-content :document="article" />
@@ -57,7 +57,8 @@ export default {
   },
   data () {
     return {
-      pageLoaded: false
+      pageLoaded: false,
+      hTags: []
     }
   },
   computed: {
@@ -71,71 +72,65 @@ export default {
   },
   watch: {
     slug () {
-      this.handleTocFixed();
-      if (this.scrollTop) {
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
-      }
-
+      this.pageLoaded = true;
+      this.$nextTick(() => {
+        this.handleTocFixed();
+      })
     }
   },
   mounted () {
+    this.hashScrollInitial();
+    this.pageLoaded = true;
     this.handleTocFixed();
   },
+  destroyed () {
+    console.log('destroyed')
+    window.removeEventListener('scroll', this.onScroll)
+  },
   methods: {
+    hashScrollInitial () {
+      const hash = this.$route.hash;
+      if (hash) {
+        const el = document.getElementById(decodeURI(hash).substr(1));
+        if (el) {
+          window.scrollTo(0, el.offsetTop + this.$refs["body-wrapper"].offsetTop)
+        }
+      }
+    },
     handleTocFixed () {
+      this.hTags = this.$refs["contents"].querySelectorAll("h1,h2,h3,h4,h5");
+      window.addEventListener("scroll", this.onScroll);
+      this.onScroll();
+    },
+    onScroll () {
+      console.log(this.hTags);
+      // for layout
+      const topWrapperOffsetTop = this.$refs["body-wrapper"].offsetTop;
       const toc = this.$refs["toc-slider"];
-      if (!toc) {
+      const scrollTop1 = document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop1 > topWrapperOffsetTop - 15) {
+        toc.classList.add("toc-fixed");
+      } else {
+        toc.classList.remove("toc-fixed");
+      }
+      // for hash
+      let scrollTop = window.pageYOffset - topWrapperOffsetTop;
+      let result = Array.from(this.hTags).filter(i => {
+        return i.offsetTop < scrollTop;
+      })
+      console.log(result);
+      if (result.length === 0) {
         return;
       }
-      const topWrapper = this.$refs["body-wrapper"];
-      if (topWrapper) {
-        this.pageLoaded = true;
-        const topWrapperOffsetTop = this.$refs["body-wrapper"].offsetTop;
-        const updateLayout = (e) => {
-          const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-          if (scrollTop > topWrapperOffsetTop - 15) {
-            toc.classList.add("toc-fixed");
-          } else {
-            toc.classList.remove("toc-fixed");
-          }
-        };
-        window.addEventListener("scroll", updateLayout);
-        updateLayout();
+      const seg = result.pop();
+      let element = toc.querySelectorAll("a");
+      for (const ele of element) {
+        ele.classList.remove("highlighted");
       }
-      this.updateScroll(toc);
-    },
-    updateScroll (toc) {
-      let orgHtml = document.querySelectorAll("h1,h2,h3,h4,h5");
-      window.addEventListener("scroll", function (e) {
-        let scrollTop = window.pageYOffset;
-        for (let i = 0; i < orgHtml.length; i++) {
-          const seg = orgHtml[i];
-          let nextSeg = orgHtml.length > i + 1 ? orgHtml[i + 1] : null;
-          let currentTag = null;
-          if (nextSeg) {
-            if (scrollTop > seg.offsetTop - 40 && scrollTop < nextSeg.offsetTop) {
-              currentTag = seg;
-            }
-          } else {
-            if (scrollTop > seg.offsetTop - 40) {
-              currentTag = seg;
-            }
-          }
-          if (currentTag) {
-            let element = toc.querySelectorAll("a");
-            for (const ele of element) {
-              ele.classList.remove("highlighted");
-            }
-            let ele2 = toc.querySelector(`a[href='#${(seg.id)}']`)
-            if (ele2) {
-              ele2.classList.add("highlighted");
-            }
-          }
-        }
-      });
+      let ele2 = toc.querySelector(`a[href='#${(seg.id)}']`)
+      if (ele2) {
+        ele2.classList.add("highlighted");
+      }
     }
   }
 }

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JSON FORMAT</title>
+  <link rel="stylesheet" href="css/iconfont/iconfont.css" />
+  <link rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!--  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/fonts/forkawesome-webfont.woff2?v=1.1.7">-->
+  <style>
+
+    body, html {
+      height: 100%;
+      margin: 0;
+    }
+
+    .tool {
+      height: 40px;
+      border-bottom: solid 1px #eee;
+      border-right: solid 1px #eee;
+      border-top: solid 1px #eee;
+      background-color: #fff;
+      width: 100%;
+      font-size: 12px;
+      display: flex;
+      box-sizing: border-box;
+    }
+
+    .tool a {
+      color: #999;
+      text-align: center;
+      flex-grow: 1;
+      line-height: 40px;
+    }
+
+    div.numberedtextarea-wrapper {
+      position: relative;
+      height: 100%;
+    }
+
+    div.numberedtextarea-wrapper textarea {
+      display: block;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    div.numberedtextarea-line-numbers {
+      position: absolute;
+      display: none;
+      background-color: #fafafa;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 40px;
+      border-right: 1px dashed #eee;
+      border-bottom: solid 1px #ddd;
+      color: #999;
+      overflow: hidden;
+    }
+
+    div.numberedtextarea-number {
+      padding-right: 6px;
+      text-align: center;
+    }
+
+    .tooltip {
+      position: relative;
+    }
+
+    .tooltip.tooltip-bottom:focus::after, .tooltip.tooltip-bottom:hover::after {
+      transform: translate(-50%, .2rem);
+    }
+
+    .tooltip.tooltip-bottom::after {
+      top: 100%;
+      bottom: auto;
+      transform: translate(-50%, -.4rem);
+    }
+
+    .tooltip:focus::after, .tooltip:hover::after {
+      transform: translate(-50%, -.2rem);
+      opacity: 1;
+    }
+
+    .tooltip::after {
+      font-size: .7rem;
+      position: absolute;
+      z-index: 300;
+      bottom: 100%;
+      left: 50%;
+      display: block;
+      overflow: hidden;
+      max-width: 320px;
+      padding: .2rem .4rem;
+      content: attr(data-tooltip);
+      transition: opacity .2s, transform .2s;
+      transform: translate(-50%, .4rem);
+      white-space: pre;
+      text-overflow: ellipsis;
+      pointer-events: none;
+      opacity: 0;
+      color: #fff;
+      border-radius: .1rem;
+      background: rgba(69, 77, 93, .95);
+    }
+
+    .json-target-wrap {
+      border-bottom: solid 1px #eee;
+      border-right: solid 1px #eee;
+      background-color: white;
+      flex: 1;
+      resize: none;
+      overflow-y: scroll;
+      outline: none;
+      position: relative;
+      font-size: 17px;
+      padding-top: 10px;
+    }
+
+    .textarea-wrap {
+      height: 100%;
+      width: 42%;
+    }
+  </style>
+
+  <style>
+    .objc_keyword {
+      color: #AA0D91;
+    }
+
+    .objc_className {
+      color: #5C2699;
+    }
+
+    .objc_proj_className {
+      color: #3F6E74;
+    }
+
+    .objc_comments {
+      color: #007400;
+    }
+
+    #body-wrapper .container {
+      padding: 0;
+    }
+
+    .header-fixed #body-wrapper {
+      padding-top: 4rem;
+    }
+
+    .iconfont {
+      line-height: 1;
+    }
+
+    #json-src {
+      width: 100%;
+      height: 100%;;
+      border-radius: 0;
+      resize: none;
+      outline: none;
+      border: 1px solid #eee;
+    }
+  </style>
+
+  <style type="text/css">
+    .objc_keyword {
+      color: #AA0D91;
+    }
+
+    .objc_String {
+      color: #d12f1b;
+    }
+
+    .objc_className {
+      color: #5C2699;
+    }
+
+    .objc_proj_className {
+      color: #3F6E74;
+    }
+
+    .objc_comments {
+      color: #007400;
+    }
+
+    .swift_margin1 {
+      margin-left: 10px;
+    }
+
+    .swift_margin2 {
+      margin-left: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="js/jquery.numberedtextarea.js"></script>
+<script src="js/jsonfiy.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/json2/20160511/json2.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jsonlint/1.6.0/jsonlint.min.js"></script>
+
+<div style="display: flex;height: 100%">
+  <div class="textarea-wrap">
+    <textarea id="json-src" placeholder="请输入json字符串..." style=""></textarea>
+  </div>
+  <div style="height:100%;width: 58%;display: flex;flex-direction: column;">
+    <div class="tool" style="display:flex;">
+      <a href="#" class="tip zip tooltip tooltip-bottom" data-tooltip="压缩" data-toggle="tooltip"
+         data-placement="bottom">
+        <i class="fa fa-database"></i>
+      </a>
+      <a href="#" class="tooltip tooltip-bottom shown" data-tooltip="显示行号" data-toggle="tooltip"
+         data-placement="bottom">
+        <i class="iconfont icon-xuhao"></i>
+      </a>
+      <a href="#" class="tip clear tooltip tooltip-bottom" data-tooltip="清空" data-toggle="tooltip"
+         data-placement="bottom"><i class="fa fa-trash"></i></a>
+      <a href="#" class="tip save tooltip tooltip-bottom" data-tooltip="保存" data-toggle="tooltip"
+         data-placement="bottom"><i class="fa fa-download"></i></a>
+      <a href="#" class="tip copy tooltip tooltip-bottom" data-tooltip="复制" data-toggle="tooltip"
+         data-clipboard-target="#json-target" data-placement="bottom"><i class="fa fa-copy"></i></a>
+      <a href="#" class="tip objc tooltip tooltip-bottom" data-tooltip="转Objective-C模型"
+         data-toggle="tooltip"
+         data-clipboard-target="#json-target" data-placement="bottom"><i
+        class="iconfont icon-ios"></i></a>
+      <a href="#" class="tip swift tooltip tooltip-bottom" data-tooltip="转Swift模型" data-toggle="tooltip"
+         data-clipboard-target="#json-target" data-placement="bottom"><i class="iconfont icon-swift"
+                                                                         style="line-height:1;"></i></a>
+      <a href="#" class="tip typeScript tooltip tooltip-bottom" data-tooltip="转typeScript模型"
+         data-toggle="tooltip"
+         data-clipboard-target="#json-target" data-placement="bottom">
+        <i class="iconfont icon-typescript"></i>
+      </a>
+      <a href="#" class="tip slashes tooltip tooltip-bottom" data-tooltip="压缩转义" data-toggle="tooltip"
+         data-clipboard-target="#json-target" data-placement="bottom"><i class="fa fa-coffee"></i></a>
+      <a href="#" class="tip reslashes tooltip tooltip-bottom" data-tooltip="反转义" data-toggle="tooltip"
+         data-clipboard-target="#json-target" data-placement="bottom"><i class="fa fa-plane"></i></a>
+      <!-- <a href="#" class="tip zuoyi" title="左移"  data-toggle="tooltip" data-clipboard-target="#json-target"  data-placement="bottom"><i class="fa fa-arrow-left"></i></a> -->
+    </div>
+    <div class="json-target-wrap">
+      <div class="ro" id="json-target"
+           style="padding:0 25px;white-space: pre-line;margin-bottom: 35px;">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+var current_json_str = '';
+var result = '';
+$('textarea').numberedtextarea();
+
+function init () {
+  zip_flag = false;
+  shown_flag = false;
+  $('.zip').attr('style', 'color:#999;');
+}
+
+$("#json-src").keyup(function () {
+  init();
+  try {
+    var contet_text = $('#json-src').val();
+    if (contet_text.length == 0) {
+      $('#json-target').text("");
+      return;
+    }
+    var res = jsonlint.parse(contet_text);
+    current_json_str = JSON.stringify(res);
+    result = new JSONFormat(current_json_str, 4).toString();
+    $('#json-target').html(result);
+  } catch (e) {
+    result = '<span style="color: #f1592a;font-weight:bold;">' + e.message + '</span>';
+    $('#json-target').html(result);
+    return false;
+  }
+});
+$("#json-src").keydown(function () {
+});
+</script>
+<script>
+var shown_flag = false;
+var zip_flag = false;
+$('.shown').click(function () {
+  if (!shown_flag) {
+    shown_flag = true;
+    $('.numberedtextarea-line-numbers').show();
+    $('#json-src').css({ 'padding': '0px 0px 0px 32px' });
+
+  } else {
+    shown_flag = false;
+    $('.numberedtextarea-line-numbers').hide();
+    $('#json-src').css({ 'padding': '0px' });
+  }
+});
+$('.zip').click(function () {
+  if (zip_flag) {
+    $('#json-src').keyup();
+  } else {
+    $('#json-target').html(current_json_str);
+    zip_flag = true;
+    $(this).attr('style', 'color:#15b374;');
+  }
+});
+$('.clear').click(function () {
+  $('#json-src').val('');
+  $('#json-target').html('');
+});
+$('.save').click(function () {
+  var text = $('#json-target').text();
+  var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+  saveAs(blob, "format.json");
+});
+$('.copy').click(function () {
+  var clipboard1 = new Clipboard('.copy');
+});
+var jsonTarget = $('#json-target');
+$('.objc').click(function () {
+  var contet_text = $('#json-src').val();
+  if (contet_text.length === 0) {
+    $('#json-target').text("");
+    return;
+  }
+  var res = jsonToObjcModel(contet_text);
+  jsonTarget.html(res);
+});
+
+$('.swift').click(function () {
+  var contet_text = $('#json-src').val();
+  if (contet_text.length === 0) {
+    $('#json-target').text("");
+    return;
+  }
+  var res = jsonToObjcModel(contet_text, 2);
+  jsonTarget.html(res);
+});
+
+//typeScript
+$('.typeScript').click(function () {
+  var contet_text = $('#json-src').val();
+  if (contet_text.length == 0) {
+    $('#json-target').text("");
+    return;
+  }
+  var res = jsonToObjcModel(contet_text, 3);
+  jsonTarget.html(res);
+});
+
+$('.reslashes').click(function () {
+  var contet_text = $('#json-src').val();
+  $('#json-target').html(contet_text.replace(/\\\\/g, "\\").replace(/\\\"/g, '\"'));
+});
+
+function addslashes (string) {
+  return string.trim().replace(/\\/g, '\\\\').replace(/\u0008/g, '\\b').replace(/\t/g, '\\t').replace(/\n/g, '\\n').replace(/\f/g, '\\f').replace(/\r/g, '\\r').replace(/'/g, '\\\'').replace(/"/g, '\\"');
+}
+
+function jsonzip (text) {
+  text = text.split("\n").join(" ");
+  var t = [];
+  var inString = false;
+  for (var i = 0, len = text.length; i < len; i++) {
+    var c = text.charAt(i);
+    if (inString && c === inString) {
+      if (text.charAt(i - 1) !== '\\') {
+        inString = false;
+      }
+    } else if (!inString && (c === '"' || c === "'")) {
+      inString = c;
+    } else if (!inString && (c === ' ' || c === "\t")) {
+      c = '';
+    }
+    t.push(c);
+  }
+  text = t.join('');
+  return text
+}
+
+$('.slashes').click(function () {
+  var contet_text = $('#json-src').val();
+  //zip
+  $('#json-target').html(addslashes(jsonzip(contet_text)));
+});
+
+$('.zuoyi').click(function () {
+  $('#json-src').val($('#json-target').text());
+});
+
+</script>
+
+<!--json to objc model-->
+<script>
+//最终的字符串
+var allResultString = '';
+
+function jsonToObjcModel (jsonString, language) {
+  language = arguments[1] ? arguments[1] : 1;
+  var obj = eval('(' + jsonString + ')');
+  allResultString = '';
+  if (language === 2) {
+    allResultString += "<span class='objc_keyword'>import </span><span>ObjectMapper</span></br>";
+  }
+  caculate(obj, 'Root', language);
+  return allResultString;
+}
+
+//辅助方法-首字母大写
+function sg_replaceStr (str) { // 正则法
+  str = str.toLowerCase();
+  var reg = /\b(\w)|\s(\w)/g; //  \b判断边界\s判断空格
+  return str.replace(reg, function (m) {
+    return m.toUpperCase();
+  });
+}
+
+function parserNumber (name, value, language) {
+  //float double  Double Float
+  language = arguments[2] ? arguments[2] : 1;
+  if (language === 2) {
+    return '<span class="objc_keyword swift_margin1">var </span> <span> ' + (name) + ':' + '</span><span class="objc_className">Float?</span></br>';
+  }
+  if (language === 3) {
+    return '<span class="swift_margin1"> ' + (name) + '?:' + '</span><span class="objc_className">number;</span></br>';
+  }
+  return '<span class="objc_keyword">@property(nonatomic,assign)</span><span class="objc_className">CGFloat</span><span> ' + (name) + ';</span></br>';
+}
+
+function parserBool (name, language) {
+  language = arguments[1] ? arguments[1] : 1;
+  if (language === 3) {
+    return '<span class="swift_margin1"> ' + (name) + '?:' + '</span><span class="objc_className">boolean;</span></br>';
+  }
+  if (language === 2) {
+    return '<span class="objc_keyword swift_margin1">var </span> <span> ' + (name) + ':' + '</span><span class="objc_className">Bool?</span></br>';
+  }
+  return '<span  class="objc_keyword">@property(nonatomic,assign)BOOL </span>' + name + ';</span></br>';
+}
+
+function parserString (name, language) {
+  language = arguments[1] ? arguments[1] : 1; // 1为oc 2为swift
+  if (language === 3) {
+    return '<span class="swift_margin1">  ' + (name) + '?:' + '</span><span class="objc_className">string;</span></br>';
+  }
+  if (language === 2) {
+    return '<span class="objc_keyword swift_margin1">var </span> <span> ' + (name) + ':' + '</span><span class="objc_className">String?</span></br>';
+  }
+  return '<span class="objc_keyword">@property(nonatomic,copy)</span><span class="objc_className">NSString</span><span> *' + name + ';</span></br>';
+}
+
+function parserObject (name, value, language) {
+  language = arguments[2] ? arguments[2] : 1;
+  //对象[object Object]、对象数组、或null；
+  if (value == null) {
+    if (language === 3) {
+      return '<span class="swift_margin1">' + (name) + '?:' + '</span><span class="objc_className">string;</span></br>';
+    }
+    if (language === 2) {
+      return '<span class="objc_keyword swift_margin1">var </span> <span> ' + (name) + ':' + '</span><span class="objc_className">String?</span></br>';
+    }
+    return '<span class="objc_keyword">@property(nonatomic,copy)</span><span class="objc_className">NSString</span><span> *' + name + ';</span> <span class="objc_comments">//null</span> </br>';
+  } else if (value instanceof Array) {
+    caculate(value, name, language);
+    //添加泛型ok
+    var _genericStr = "";
+    if (value.length > 0 && typeof (value[0]) == 'object') {
+      _genericStr = '&lt;#' + sg_replaceStr(name) + 'Item#&gt;'
+    }
+    if (language === 3) {
+      return '<span class="swift_margin1"> ' + (name) + '?:' + '</span><span class="objc_className">' + sg_replaceStr(name) + 'Items[];</span></br>';
+    }
+    if (language === 2) {
+      return '<span class="objc_keyword swift_margin1">var </span> <span> ' + (name) + ':' + '</span><span class="objc_className">Array' + _genericStr + '?</span></br>';
+    }
+    return '<span  class="objc_keyword">@property(nonatomic,strong)</span><span class="objc_className">NSArray' + _genericStr + '</span><span> *' + name + ';</span></br>';
+
+  } else if (isNaN(value.length)) {
+    caculate(value, sg_replaceStr(name), language);
+    if (language === 2) {
+      return '<span class="objc_keyword swift_margin1">var </span> <span> ' + (name) + ':' + '</span><span class="objc_className">' + sg_replaceStr(name) + '?</span></br>';
+    }
+    if (language === 3) {
+      return '<span class="swift_margin1">' + (name) + '?:' + '</span><span class="objc_className">' + sg_replaceStr(name) + ';</span></br>';
+    }
+    return '<span  class="objc_keyword">@property(nonatomic,strong)</span><span class="objc_proj_className">' + sg_replaceStr(name) + '</span><span> *' + name + ';</span></br>';
+  }
+  return '';
+}
+
+//1. 先判断是数组、或者是字典
+function caculate (obj, subTitle, language) {
+  subTitle = arguments[1] ? arguments[1] : "";//设置参数a的默认值为1
+  language = arguments[2] ? arguments[2] : 1; // 1为oc 2为swift
+  if (obj instanceof Array) { //数组
+    if (obj.length > 0 && typeof (obj[0]) == 'object') {
+      caculate(obj[0], subTitle + 'Items', language);
+    }
+    return;
+  } else if (obj instanceof Object) { //字典
+  }
+  var output = '';
+  output += "<span class='objc_comments'>//---" + subTitle + "---</span></br>";
+  if (language == 1) {
+    output += "<span class='objc_keyword'>@interface </span> <#" + subTitle + "#> : <span class='objc_className'>NSObject</span></br>";
+  } else if (language == 3) {
+    output += "<span class='objc_keyword'>export class  </span> <#" + subTitle + "#> {</br>";
+  } else {
+    output += "<span class='objc_keyword'>struct </span> <#" + subTitle + "#> : <span class='objc_className'>Mappable</span> {</br>";
+  }
+  for (var name in obj) {
+    var n = name;
+    var v = obj[name];
+    if (typeof (obj[name]) == 'boolean') {
+      output += parserBool(name, language);
+    }
+    if (typeof (obj[name]) == 'string') {
+      output += parserString(name, language);
+    }
+    if (typeof (obj[name]) == 'number') {
+      output += parserNumber(name, v, language);
+    }
+    if (typeof (obj[name]) == 'object') {//对象[object Object]、对象数组、或null；
+      output += parserObject(n, v, language);
+    }
+  }
+  if (language == 2) {
+    output += "<span class='objc_keyword swift_margin1'>init</span>" + "?(map:" + "<span class='objc_className'>Map</span>" + ') {</br><span class="swift_margin1">}</span></br>'
+    output += "<span class='objc_keyword swift_margin1'>mutating func </span>" + "mapping(map:" + "<span class='objc_className'>Map</span>" + ") {</br>"
+    for (var name in obj) {
+      var input = "<span class='objc_className swift_margin2'>" + name + "</span> <- " + 'map[<span class="objc_String">"' + name + '"</span>]</br>'
+      output += input;
+    }
+    output += '<span class="swift_margin1">}</span></br>';
+  }
+  if (language == 1) {
+    output += "<span class='objc_keyword'>@end</span></br>";
+  } else {
+    output += "}</br>";
+  }
+  allResultString += output;
+}
+</script>
+
+</body>
+</html>

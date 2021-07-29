@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RSA</title>
+  <style type="text/css">
+    body {
+      color: #333333;
+      background-color: #fafafa;
+    }
+
+    textarea {
+      width: 100%;
+      border-width: 0;
+      border-radius: 0;
+      resize: none;
+      outline: none;
+    }
+
+    .form-radio {
+      display: inline-block;
+      margin-left: 10px;
+    }
+
+    .form-input {
+      font-size: 12px;
+      color: black;
+    }
+
+    .content article div {
+      text-align: left;
+    }
+
+    button {
+      margin-left: 8px;
+    }
+
+    .text-area-div {
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+<div style="display: flex;">
+  <div style="width: 50%;">
+    <div style="display:flex;align-items: center; margin-bottom: 8px;">
+      <div>
+        <label class="form-radio" onclick="shows($(this).text())">
+          <input type="radio" name="gender" checked>
+          <i class="form-icon"></i> 512bit
+        </label>
+        <label class="form-radio" onclick="shows($(this).text())">
+          <input type="radio" name="gender">
+          <i class="form-icon"></i> 1024bit
+        </label>
+        <label class="form-radio" onclick="shows($(this).text())">
+          <input type="radio" name="gender">
+          <i class="form-icon"></i> 2048bit
+        </label>
+      </div>
+      <button type="button" id="gnKeyButton" class="btn btn-primary">重新生成
+        <span id='keysize' class="buttonText"> 512bit</span>
+      </button>
+    </div>
+    <div class="text-area-div">
+      <label for="pubkey">公钥</label>
+      <textarea id="pubkey" class="form-input" style="font-size: 12px" rows="6" cols="">-----BEGIN PUBLIC KEY-----
+MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAMcHbqKlhJ5e/jrmx69IsEPhnDzNW8bt
+S2EssETAIQ7DKNeiaEryB6DbGUrGQlG2LQZp0rzmp5LTmf2lVIte8HsCAwEAAQ==
+-----END PUBLIC KEY-----</textarea>
+    </div>
+    <div class="text-area-div">
+      <label for="privkey">私钥</label>
+      <textarea id="privkey" class="form-input" style="font-size: 12px" rows="10" cols="">-----BEGIN RSA PRIVATE KEY-----
+MIIBOwIBAAJBAMcHbqKlhJ5e/jrmx69IsEPhnDzNW8btS2EssETAIQ7DKNeiaEry
+B6DbGUrGQlG2LQZp0rzmp5LTmf2lVIte8HsCAwEAAQJAA2nZN+jm0WCHs7LpkdQJ
+UeC4sUJEZLEFLfF6RHOXHY2rki8nPmhJYMByXFT9QUBKCGmRpJmI2BpmmXshR8a/
+wQIhAOojs2iLk7BUvujN9onzY3z+usMeNITLi6MCmCQHoRwTAiEA2ZyJjJofh1hy
+8Im2wspiVpbOeqC0ikNaext0axHbFvkCIQDeigQxr8g15rZ1a52STKUY3rwATCs6
+tIQJ8aNNS3sTxQIhAJianR87yhZ5IYmrmb36fYHpmf0HC/TWDPK+KyMWz4TJAiAu
+semDRetx1HaakcCF0oXkX3vHRSn9JL2cmdstB92gsw==
+-----END RSA PRIVATE KEY-----</textarea>
+    </div>
+  </div>
+
+  <div style="width: 48%;margin-left: 16px;margin-bottom: 8px;">
+    <div style="margin-bottom: 8px">
+      <button type="button" id="encrypt" class="btn btn-primary">加密</button>
+      <button type="button" id="decrypt" class="btn btn-primary">解密</button>
+    </div>
+    <div class="text-area-div">
+      <label for="plaintext">明文</label>
+      <textarea id="plaintext" class="form-input" style="font-size: 12px" rows="6"
+                cols=""></textarea>
+    </div>
+    <div class="text-area-div">
+      <label for="ciphertext">密文</label>
+      <textarea id="ciphertext" class="form-input" style="font-size: 12px" rows="10"
+                cols=""></textarea>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.min.js" type="text/javascript"
+        charset="utf-8">
+</script>
+
+
+<script type="text/javascript">
+
+function shows (a) {
+  $('.buttonText').text(a)
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  $('#gnKeyButton').on('click', function () {
+    var sKeySize = $('#keysize').text();
+    var j = parseInt(sKeySize); //就
+    var crypt = new JSEncrypt({
+      default_key_size: j
+    });
+    $('#privkey').val(crypt.getPrivateKey());
+    $('#pubkey').val(crypt.getPublicKey());
+  });
+
+  $("#encrypt").on('click', function () {
+    //ciphertext
+    var encrypt = new JSEncrypt();
+    encrypt.setPublicKey($('#pubkey').val());
+    var encrypted = encrypt.encrypt($('#plaintext').val());
+    $('#ciphertext').val(encrypted);
+  });
+  $("#decrypt").on('click', function () {
+    //plaintext
+    var decrypt = new JSEncrypt();
+    decrypt.setPrivateKey($('#privkey').val());
+    var uncrypted = decrypt.decrypt($('#ciphertext').val());
+    $('#plaintext').val(uncrypted);
+  });
+});
+</script>
+
+</body>
+</html>
+
+
+

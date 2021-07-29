@@ -1,9 +1,10 @@
 <template>
-  <section class="container list">
+  <section class="container list"
+           :class="{'column-flex': flexList}">
     <h1 class="title" v-if="title">
       {{ title }}
     </h1>
-    <slot/>
+    <slot />
   </section>
 </template>
 
@@ -14,11 +15,18 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    flexList: {
+      type: Boolean,
+      default: false
     }
   }
 }
 </script>
 
 <style scoped>
-
+  .column-flex {
+    display: flex;
+    flex-direction: column;
+  }
 </style>

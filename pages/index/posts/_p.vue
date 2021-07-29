@@ -45,7 +45,6 @@ export default {
       pagination.getPostsOfPage($content, pageNum),
       pagination.getNumberOfPages($content),
     ]);
-    debugger
     return { articles, pageNum, pageCount }
   }
 }

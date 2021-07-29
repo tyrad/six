@@ -1,5 +1,7 @@
 <template>
-<div>wiki</div>
+  <div>
+    <nuxt-child />
+  </div>
 </template>
 
 <script>

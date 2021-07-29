@@ -39,8 +39,7 @@ import ArticleHeader from "../../../../components/ArticleHeader"
 export default {
   components: { ArticleHeader },
   async asyncData ({ $content, params, error }) {
-    //const article = await $content('articles/go', params.slug).fetch()
-    //添加支持deep查询,注意:文件名称不能相同
+    const scrollTop = params.scrollTop;
     const articles = await $content('articles', { deep: true })
       .where({ slug: params.slug })
       .limit(1)
@@ -54,7 +53,7 @@ export default {
       .sortBy('date', 'asc')
       .surround(params.slug)
       .fetch()
-    return { article, prev, next }
+    return { article, prev, next, scrollTop }
   },
   data () {
     return {
@@ -73,6 +72,13 @@ export default {
   watch: {
     slug () {
       this.handleTocFixed();
+      if (this.scrollTop) {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+      }
+
     }
   },
   mounted () {
@@ -102,36 +108,34 @@ export default {
       this.updateScroll(toc);
     },
     updateScroll (toc) {
-      window.onload = (e) => {
-        let orgHtml = document.querySelectorAll("h1,h2,h3,h4,h5");
-        window.addEventListener("scroll", function (e) {
-          let scrollTop = window.pageYOffset;
-          for (let i = 0; i < orgHtml.length; i++) {
-            const seg = orgHtml[i];
-            let nextSeg = orgHtml.length > i + 1 ? orgHtml[i + 1] : null;
-            let currentTag = null;
-            if (nextSeg) {
-              if (scrollTop > seg.offsetTop - 40 && scrollTop < nextSeg.offsetTop) {
-                currentTag = seg;
-              }
-            } else {
-              if (scrollTop > seg.offsetTop - 40) {
-                currentTag = seg;
-              }
+      let orgHtml = document.querySelectorAll("h1,h2,h3,h4,h5");
+      window.addEventListener("scroll", function (e) {
+        let scrollTop = window.pageYOffset;
+        for (let i = 0; i < orgHtml.length; i++) {
+          const seg = orgHtml[i];
+          let nextSeg = orgHtml.length > i + 1 ? orgHtml[i + 1] : null;
+          let currentTag = null;
+          if (nextSeg) {
+            if (scrollTop > seg.offsetTop - 40 && scrollTop < nextSeg.offsetTop) {
+              currentTag = seg;
             }
-            if (currentTag) {
-              let element = toc.querySelectorAll("a");
-              for (const ele of element) {
-                ele.classList.remove("highlighted");
-              }
-              let ele2 = toc.querySelector(`a[href='#${(seg.id)}']`)
-              if (ele2) {
-                ele2.classList.add("highlighted");
-              }
+          } else {
+            if (scrollTop > seg.offsetTop - 40) {
+              currentTag = seg;
             }
           }
-        });
-      };
+          if (currentTag) {
+            let element = toc.querySelectorAll("a");
+            for (const ele of element) {
+              ele.classList.remove("highlighted");
+            }
+            let ele2 = toc.querySelector(`a[href='#${(seg.id)}']`)
+            if (ele2) {
+              ele2.classList.add("highlighted");
+            }
+          }
+        }
+      });
     }
   }
 }

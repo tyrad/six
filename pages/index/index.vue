@@ -54,7 +54,21 @@
 
 <script>
 export default {
-  name: "index"
+  name: "index",
+  mounted () {
+    this.xx().then(() => {
+
+    }).catch(err => {
+      console.log(err)
+    })
+  },
+  methods: {
+    xx () {
+      return new Promise((resolve, reject) => {
+        reject({ code: true, success: true })
+      });
+    }
+  }
 }
 </script>
 

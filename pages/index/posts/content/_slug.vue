@@ -84,7 +84,6 @@ export default {
     this.handleTocFixed();
   },
   destroyed () {
-    console.log('destroyed')
     window.removeEventListener('scroll', this.onScroll)
   },
   methods: {
@@ -103,7 +102,6 @@ export default {
       this.onScroll();
     },
     onScroll () {
-      console.log(this.hTags);
       // for layout
       const topWrapperOffsetTop = this.$refs["body-wrapper"].offsetTop;
       const toc = this.$refs["toc-slider"];
@@ -118,7 +116,6 @@ export default {
       let result = Array.from(this.hTags).filter(i => {
         return i.offsetTop < scrollTop;
       })
-      console.log(result);
       if (result.length === 0) {
         return;
       }

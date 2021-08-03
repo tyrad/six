@@ -26,7 +26,7 @@ export default [
         meta: {},
       },
       {
-        path: "index-wiki-wiki",
+        path: "index-wiki",
         name: "wiki",
         meta: {},
       },

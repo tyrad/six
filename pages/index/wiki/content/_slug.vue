@@ -40,7 +40,7 @@ export default {
   components: { ArticleHeader },
   async asyncData ({ $content, params, error }) {
     const scrollTop = params.scrollTop;
-    const articles = await $content('articles/wiki', { deep: true })
+    const articles = await $content('wiki', { deep: true })
       .where({ slug: params.slug })
       .limit(1)
       .fetch();
@@ -48,7 +48,7 @@ export default {
       error({ statusCode: 404, message: '' });
     }
     const article = articles[0];
-    const [prev, next] = await $content('articles/wiki', { deep: true })
+    const [prev, next] = await $content('wiki', { deep: true })
       .only(['title', 'slug'])
       .sortBy('date', 'asc')
       .surround(params.slug)

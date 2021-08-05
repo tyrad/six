@@ -8,6 +8,7 @@
           </ul>
         </div>
       </div>
+
       <div class="wiki-category" v-for="item of sortedArticles" :key="item.folderName">
         <h3 class="wiki-category-name" :id="item.folderName">{{ item.folderName }}</h3>
         <div class="wiki-category-list">
@@ -49,94 +50,60 @@
 
 <script>
 
+const sort = {
+  sortArticles (articles) {
+    let sortedArticles = []
+    for (const article of articles) {
+      let path = article.path;
+      let paths = path.substr('/wiki/'.length, path.length).split('/')
+      paths.pop()
+      let subFolder = sortedArticles;
+      for (let [idx, p] of paths.entries()) {
+        let el = this.getFolder(p, subFolder);
+        subFolder = el.children;
+        if (idx === paths.length - 1) {
+          el['articles'].push(article);
+        }
+      }
+    }
+    return sortedArticles;
+  },
+  getFolder (name, children) {
+    let filtered = children.filter(item => {
+      return item['folderName'] === name
+    });
+    if (filtered.length === 0) {
+      // 没有找到
+      let newEle = {
+        folderName: name,
+        articles: [],
+        children: []
+      };
+      children.push(newEle)
+      return newEle;
+    } else {
+      return filtered[0];
+    }
+  }
+}
+
 export default {
   name: "wiki",
   async asyncData ({ $content, params }) {
     const articles = await $content('wiki', { deep: true })
-      .only(['title', 'date', 'slug'])
+      /// 坑点： dev启动是有path的。generate默认没有path，需要手动加上
+      .only(['title', 'date', 'slug', 'path'])
       .sortBy('date', 'desc')
       .fetch();
-    return { articles }
+    const sortedArticles = sort.sortArticles(articles);
+    return { sortedArticles }
   },
   data () {
-    return {
-      sortedArticles: []
-    }
+    return {}
   },
   mounted () {
-    this.sortedArticles = this.sortArticles(this.articles);
   },
-  methods: {
-    sortArticles (articles) {
-      // let articles = [
-      //   {
-      //     "slug": "记录值是否存在另一个表中",
-      //     "date": "2020-11-10T09:15:46.000Z",
-      //     "title": "记录值是否存在另一个表中",
-      //     "path": "/wiki/database/sql/记录值是否存在另一个表中",
-      //     "extension": ".md"
-      //   },
-      //   {
-      //     "slug": "时间处理.md",
-      //     "date": "2020-11-10T08:35:45.000Z",
-      //     "title": "时间处理",
-      //     "path": "/wiki/database/oracle/时间处理.md",
-      //     "extension": ".md"
-      //   }];
-      /*
-      [
-        {
-          folderName: 'xx'
-          articles:[ '1', '2', '3']
-          children: [
-             {
-                folderName: 'xx'
-                articles:[ '1', '2', '3']
-                children: [
-                   {
-
-                   }
-                ]
-             }
-          ]
-        }
-      ]
-      */
-      let sortedArticles = []
-      for (const article of articles) {
-        let path = article.path;
-        let paths = path.substr('/wiki/'.length, path.length).split('/')
-        paths.pop()
-        // xx1 -> xx
-        let subFolder = sortedArticles;
-        for (let [idx, p] of paths.entries()) {
-          let el = this.getFolder(p, subFolder);
-          subFolder = el.children;
-          if (idx === paths.length - 1) {
-            el['articles'].push(article);
-          }
-        }
-      }
-      return sortedArticles;
-    },
-    getFolder (name, children) {
-      let filtered = children.filter(item => {
-        return item['folderName'] === name
-      });
-      if (filtered.length === 0) {
-        // 没有找到
-        let newEle = {
-          folderName: name,
-          articles: [],
-          children: []
-        };
-        children.push(newEle)
-        return newEle;
-      } else {
-        return filtered[0];
-      }
-    }
-  }
+  methods: {}
 }
 </script>
 
@@ -144,6 +111,7 @@ export default {
   .content {
     margin: 0 auto;
   }
+
   .wiki-category-name {
     float: right;
     text-align: right;

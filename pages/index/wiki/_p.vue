@@ -32,7 +32,7 @@ const pagination = {
       .fetch()
   },
   async getNumberOfPages ($content) {
-    return Math.ceil((await $content('articles', { deep: true }).only([]).fetch()).length / 10)
+    return Math.ceil((await $content('wiki', { deep: true }).only([]).fetch()).length / 10)
   },
 }
 

@@ -1,3 +1,4 @@
+const Timestamp = new Date().getTime()
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -69,5 +70,11 @@ export default {
     hoistUseStatements: false  // Hoists the "@use" imports. Applies only to "sass", "scss" and "less". Default: false.
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {}
+  build: {
+    extend(config, ctx) {
+      config.output.filename = `js/[name].${Timestamp}.js` // 每次构建打包时给文件名加上时间戳，保证版本更新时与上版本文件名不一样
+      config.output.chunkFilename = `js/[name].${Timestamp}.js`
+      // ...
+    }
+  }
 }

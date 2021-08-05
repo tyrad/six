@@ -2,7 +2,7 @@
   <div class="flex justify-between">
     <NuxtLink
       v-if="prev"
-      :to="{ name: 'index-posts-content-slug', params: { slug: prev.slug} }"
+      :to="{ name:routerName, params: { slug: prev.slug} }"
       class="font-bold text-primary hover:underline"
     >
       上一篇{{ prev.title }}

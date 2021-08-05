@@ -7,7 +7,7 @@
              :class="{'co-width-12': pageLoaded && !tocVisible }"
              class="body-content co-width-10">
           <nuxt-content :document="article" />
-          <prev-next :prev="prev" :next="next" />
+          <!--<prev-next :prev="prev" :next="next" />-->
         </div>
         <div class="sidebar co-width-2"
              style="padding-left: 12px;"
@@ -40,7 +40,7 @@ export default {
   components: { ArticleHeader },
   async asyncData ({ $content, params, error }) {
     const scrollTop = params.scrollTop;
-    const articles = await $content('articles', { deep: true })
+    const articles = await $content('articles/wiki', { deep: true })
       .where({ slug: params.slug })
       .limit(1)
       .fetch();
@@ -48,7 +48,7 @@ export default {
       error({ statusCode: 404, message: '' });
     }
     const article = articles[0];
-    const [prev, next] = await $content('articles', { deep: true })
+    const [prev, next] = await $content('articles/wiki', { deep: true })
       .only(['title', 'slug'])
       .sortBy('date', 'asc')
       .surround(params.slug)

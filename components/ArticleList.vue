@@ -11,7 +11,7 @@
       <li v-for="item of articles" :key="item.title">
         <span class="date">{{ item.date | toParseTime}}</span>
         <NuxtLink class="title"
-                  :to="{ name: 'index-posts-content-slug', params: { slug: item.slug , path: item.path } }">
+                  :to="{ name: routerName, params: { slug: item.slug , path: item.path } }">
           {{ item.title }}
         </NuxtLink>
       </li>
@@ -35,6 +35,10 @@ export default {
     articles: {
       type: Array,
       default: () => []
+    },
+    routerName: {
+      type :String,
+      default: "index-posts-content-slug"
     }
   }
 }

@@ -159,3 +159,4 @@ github action
 
 动态路由param是否可行 ，这样可以省略  content 一层目录
 
+cate：头部分类、路径修改

@@ -20,15 +20,15 @@ export default [
     path: "index-wiki",
     name: "Wiki",
     children: [
-      {
-        path: "index-wiki-some",
-        name: "Timeline",
-      },
       // {
-      //   path: "index-wiki-p",
+      //   path: "index-wiki-some",
       //   name: "Timeline",
-      //   params: { p: 1 }
       // },
+      {
+        path: "index-wiki-p",
+        name: "Timeline",
+        params: { p: 1 }
+      },
       // {
       //   path: "index-wiki",
       //   name: "wiki",

@@ -1,7 +1,7 @@
 <template>
   <ArticleList title="Posts"
                :articles="articles">
-    <ul class="pagination">
+    <ul class="pagination" v-if="pageCount > 1">
       <li>
         <nuxt-link :to="{name: 'index-posts-p', params: {p: pageNum - 1} }"
                    v-if="pageNum !== 1">«
@@ -26,12 +26,12 @@ const pagination = {
     return $content('articles', { deep: true })
       .only(['title', 'date', 'slug'])
       .sortBy('date', 'desc')
-      .skip(10 * (page - 1))
-      .limit(10)
+      .skip(20 * (page - 1))
+      .limit(20)
       .fetch()
   },
   async getNumberOfPages ($content) {
-    return Math.ceil((await $content('articles', { deep: true }).only([]).fetch()).length / 10)
+    return Math.ceil((await $content('articles', { deep: true }).only([]).fetch()).length / 20)
   },
 }
 

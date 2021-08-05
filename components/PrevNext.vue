@@ -10,7 +10,7 @@
     <span v-else>&nbsp;</span>
     <NuxtLink
       v-if="next"
-      :to="{ name: 'index-posts-content-slug', params: { slug: next.slug } }"
+      :to="{ name: routerName, params: { slug: next.slug } }"
       class="font-bold hover:underline"
     >
       下一篇{{ next.title }}
@@ -30,6 +30,10 @@ export default {
     next: {
       type: Object,
       default: () => null
+    },
+    routerName: {
+      type :String,
+      default: "index-posts-content-slug"
     }
   }
 }

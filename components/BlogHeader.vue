@@ -30,7 +30,7 @@
             v-if="item.children && item.children.length > 0"
           >
             <li v-for="subItem in item.children" :key="subItem.path">
-              <nuxt-link :to="{name: subItem.path}"> {{ subItem.name }}</nuxt-link>
+              <nuxt-link :to="{name: subItem.path, params: item.params}"> {{ subItem.name }}</nuxt-link>
             </li>
           </ul>
         </li>

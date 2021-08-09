@@ -162,3 +162,10 @@ github action
 cate：头部分类、路径修改
 
 iframe loading 
+
+左右箭头切换不错
+
+
+seo优化 
+
+支持多目录的查询。动态路由？ 动态查询更深的目录

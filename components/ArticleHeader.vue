@@ -12,13 +12,19 @@
                 </time>
               </span>
       </div>
-      <div class="categories" v-if="article.categories && article.categories.length > 0">
+
+      <div class="categories" v-if="!isWikiHeader && article.categories && article.categories.length > 0">
         <fa class="fa" :icon="['fas', 'folder']" />
         <span :key="index" v-for="(item, index) of article.categories">
               <NuxtLink :to="{ name: 'index-categories-slug', params:{slug: item } }"> {{ item }} </NuxtLink>
               <span v-if="index !== article.categories.length - 1" class="separator">•</span>
             </span>
       </div>
+      <div class="categories" v-else>
+        <fa class="fa" :icon="['fas', 'folder']" />
+        <NuxtLink :to="{ name: 'index-wiki', hash:`#${wikiCategory}` }"> {{ wikiCategory }}</NuxtLink>
+      </div>
+
       <div class="tags" v-if="article.tags && article.tags.length > 0">
         <fa class="fa" :icon="['fas', 'tag']" />
         <span :key="index" v-for="(tag, index) of article.tags">
@@ -37,6 +43,19 @@ export default {
     article: {
       type: Object,
       default: {}
+    },
+    isWikiHeader: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    wikiCategory () {
+      let path = this.article.path;
+      path = path.slice('/wiki/'.length)
+      path = path.substr(0, path.indexOf("/"));
+      console.log(path)
+      return path
     }
   }
 }

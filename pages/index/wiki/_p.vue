@@ -2,26 +2,18 @@
   <ArticleList title="Wiki"
                router-name="index-wiki-content-slug"
                :articles="articles">
-    <ul class="pagination">
-      <li>
-        <nuxt-link :to="{name: 'index-wiki-p', params: {p: pageNum - 1} }"
-                   v-if="pageNum !== 1">«
-        </nuxt-link>
-      </li>
-      <li v-for="index in pageCount">
-        <nuxt-link :to="{name: 'index-wiki-p', params: {p: index }}" v-if="index !== pageNum">{{ index }}</nuxt-link>
-        <span style="margin-right: 5px;" v-if="index === pageNum">{{ index }}</span>
-      </li>
-      <li>
-        <nuxt-link :to="{name: 'index-wiki-p', params: {p: pageNum + 1}}"
-                   v-if="pageNum !== pageCount">»
-        </nuxt-link>
-      </li>
-    </ul>
+
+    <Pagination
+      route-name='index-wiki-p'
+      :page-num="pageNum"
+      :page-count="pageCount" />
+
   </ArticleList>
 </template>
 
 <script>
+import Pagination from "../../../components/Pagination"
+
 const pagination = {
   getPostsOfPage ($content, page) {
     return $content('wiki', { deep: true })
@@ -37,6 +29,7 @@ const pagination = {
 }
 
 export default {
+  components: { Pagination },
   validate ({ params }) {
     return /^\d+$/.test(params.p)
   },
@@ -46,6 +39,11 @@ export default {
       pagination.getPostsOfPage($content, pageNum),
       pagination.getNumberOfPages($content),
     ]);
+    for (let item of articles) {
+      item.path = item.path.slice('/wiki/'.length);
+      item.path = item.path.substr(0, item.path.lastIndexOf("/" + item.slug));
+      item.title = `【${item.path}】${item.title}`;
+    }
     return { articles, pageNum, pageCount }
   }
 }

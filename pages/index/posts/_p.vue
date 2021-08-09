@@ -1,22 +1,10 @@
 <template>
   <ArticleList title="Posts"
                :articles="articles">
-    <ul class="pagination" v-if="pageCount > 1">
-      <li>
-        <nuxt-link :to="{name: 'index-posts-p', params: {p: pageNum - 1} }"
-                   v-if="pageNum !== 1">«
-        </nuxt-link>
-      </li>
-      <li v-for="index in pageCount">
-        <nuxt-link :to="{name: 'index-posts-p', params: {p: index }}" v-if="index !== pageNum">{{ index }}</nuxt-link>
-        <span style="margin-right: 5px;" v-if="index === pageNum">{{ index }}</span>
-      </li>
-      <li>
-        <nuxt-link :to="{name: 'index-posts-p', params: {p: pageNum + 1}}"
-                   v-if="pageNum !== pageCount">»
-        </nuxt-link>
-      </li>
-    </ul>
+    <Pagination
+      route-name='index-posts-p'
+      :page-num="pageNum"
+      :page-count="pageCount" />
   </ArticleList>
 </template>
 

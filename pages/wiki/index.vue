@@ -14,7 +14,7 @@
         <div class="wiki-category-list">
           <ul>
             <li class="pagelist" v-for="at of item.articles" :key="at.title">
-              <nuxt-link :to="{name: 'index-wiki-content-slug', params: {slug: at.slug }}">{{ at.title }}</nuxt-link>
+              <nuxt-link :to="{name: 'wiki-content-slug', params: {slug: at.slug }}">{{ at.title }}</nuxt-link>
             </li>
             <li class="pagelist" v-for="sub of item.children" :key="sub.folderName">
                 <span class="wiki-collection">
@@ -24,7 +24,7 @@
               <ul>
                   <span v-for="at of sub.articles" :key="at.title">
                     <nuxt-link
-                      :to="{name: 'index-wiki-content-slug', params: {slug: at.slug }}">{{ at.title || at.slug }}</nuxt-link>
+                      :to="{name: 'wiki-content-slug', params: {slug: at.slug }}">{{ at.title || at.slug }}</nuxt-link>
                   &nbsp;/&nbsp;
                   </span>
               </ul>

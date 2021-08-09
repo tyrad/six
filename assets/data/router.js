@@ -17,15 +17,11 @@ export default [
     name: "Series",
   },
   {
-    path: "index-wiki",
+    path: "wiki",
     name: "Wiki",
     children: [
-      // {
-      //   path: "index-wiki-some",
-      //   name: "Timeline",
-      // },
       {
-        path: "index-wiki-p",
+        path: "wiki-p",
         name: "Timeline",
         params: { p: 1 }
       },
@@ -53,7 +49,7 @@ export default [
     ],
   },
   {
-    path: "index-about",
+    path: "about",
     name: "About",
     meta: {},
   }

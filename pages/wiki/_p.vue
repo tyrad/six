@@ -1,6 +1,6 @@
 <template>
   <ArticleList title="Wiki"
-               router-name="index-wiki-content-slug"
+               router-name="wiki-content-slug"
                :articles="articles">
 
     <Pagination
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Pagination from "../../../components/Pagination"
+import Pagination from "@/components/Pagination"
 
 const pagination = {
   getPostsOfPage ($content, page) {

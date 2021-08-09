@@ -7,7 +7,7 @@
              :class="{'co-width-12': pageLoaded && !tocVisible }"
              class="body-content co-width-10">
           <nuxt-content :document="article" />
-          <prev-next routerName="index-wiki-content-slug" :prev="prev" :next="next" />
+          <prev-next routerName="wiki-content-slug" :prev="prev" :next="next" />
         </div>
         <div class="sidebar co-width-2"
              style="padding-left: 12px;"

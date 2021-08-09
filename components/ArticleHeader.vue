@@ -22,7 +22,7 @@
       </div>
       <div class="categories" v-else>
         <fa class="fa" :icon="['fas', 'folder']" />
-        <NuxtLink :to="{ name: 'index-wiki', hash:`#${wikiCategory}` }"> {{ wikiCategory }}</NuxtLink>
+        <NuxtLink :to="{ name: 'wiki', hash:`#${wikiCategory}` }"> {{ wikiCategory }}</NuxtLink>
       </div>
 
       <div class="tags" v-if="article.tags && article.tags.length > 0">

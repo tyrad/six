@@ -4,7 +4,7 @@
                :articles="articles">
 
     <Pagination
-      route-name='index-wiki-p'
+      route-name='wiki-p'
       :page-num="pageNum"
       :page-count="pageCount" />
 

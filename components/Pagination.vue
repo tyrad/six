@@ -31,7 +31,7 @@ export default {
     },
     routeName: {
       type: String,
-      default: 'index-wiki-p'
+      default: 'wiki-p'
     },
   }
 }

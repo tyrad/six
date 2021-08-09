@@ -19,12 +19,12 @@ const pagination = {
     return $content('wiki', { deep: true })
       .only(['title', 'date', 'slug'])
       .sortBy('date', 'desc')
-      .skip(20 * (page - 1))
-      .limit(20)
+      .skip(15 * (page - 1))
+      .limit(15)
       .fetch()
   },
   async getNumberOfPages ($content) {
-    return Math.ceil((await $content('wiki', { deep: true }).only([]).fetch()).length / 20)
+    return Math.ceil((await $content('wiki', { deep: true }).only([]).fetch()).length / 15)
   },
 }
 

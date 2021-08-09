@@ -24,7 +24,8 @@ export default {
     if (!this.$router || !this.$router.options || !this.$router.options.routes) {
       return;
     }
-    this.routes = this.rescueForPath('tools').filter( item => {
+    console.log(this.$router.options.routes)
+    this.routes = this.rescueForPath('/tools').filter( item => {
       return item.name !== ''
     });
   },

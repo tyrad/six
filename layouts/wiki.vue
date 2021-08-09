@@ -1,10 +1,12 @@
 <template>
-  <nuxt-child />
+  <div>
+    wiki index
+    <Nuxt />
+  </div>
 </template>
 
 <script>
 export default {
-  name: "tools"
 }
 </script>
 

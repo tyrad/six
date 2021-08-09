@@ -37,16 +37,16 @@ export default [
     ],
   },
   {
-    path: "index-tools",
+    path: "tools",
     name: "Tools",
     children: [
       {
-        path: "index-tools-json",
+        path: "tools-json",
         name: "JSON解析",
         meta: {},
       },
       {
-        path: "index-tools-rsa",
+        path: "tools-rsa",
         name: "RSA测试",
         meta: {},
       },

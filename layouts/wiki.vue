@@ -7,9 +7,7 @@
       'colorscheme-dark': darkScheme,
     }"
   >
-    <div class="content">
-      <Nuxt />
-    </div>
+    <Nuxt />
   </main>
 </template>
 

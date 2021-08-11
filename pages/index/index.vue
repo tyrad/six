@@ -5,7 +5,7 @@
         <img src="@/assets/image/avatar.jpg" alt="avatar" />
       </div>
       <h1>MistJ</h1>
-      <h2>Full Stack Developer</h2>
+      <h2>The Flavor of Time</h2>
       <!--      <ul>-->
       <!--        <li>-->
       <!--          <a href="https://github.com/johndoe/" aria-label="Github">-->

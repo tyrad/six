@@ -1,48 +1,53 @@
 <template>
   <section class="wiki-index">
-    <div style="min-width: 600px; width: 70%;margin: 0 auto;" id="wiki-content">
-      <div class="bar7" style="position: relative;">
-        <input type="text" onblur="onBlur()" oninput="OnInput(event)" placeholder="请输入您要搜索的内容...">
-        <div id="search-res" style="position: absolute;top:40px">
-          <ul class="dropdown-content">
-          </ul>
-        </div>
-      </div>
+    <div class="wiki-category-aside">
+      <NuxtLink :to="{ name: 'index' }"
+                style="padding-top: 20px;display: flex;align-items:center;justify-content:center;">
+        <fa class="fa" :icon="['fas', 'arrow-left']" />
+        <span style="margin-left: 8px;">Go back</span>
+      </NuxtLink>
+      <ul>
+        <li v-for="item of sortedArticles">
+          <a :href="`#${item.folderName}`">{{ item.folderName }}</a>
+        </li>
+      </ul>
+    </div>
 
-      <div class="wiki-category" v-for="item of sortedArticles" :key="item.folderName">
-        <h3 class="wiki-category-name" :id="item.folderName">{{ item.folderName }}</h3>
-        <div class="wiki-category-list">
-          <ul>
-            <li class="pagelist" v-for="at of item.articles" :key="at.title">
-              <nuxt-link :to="{name: 'wiki-content-slug', params: {slug: at.slug }}">{{ at.title }}</nuxt-link>
-            </li>
-            <li class="pagelist" v-for="sub of item.children" :key="sub.folderName">
+    <div style="position:absolute;left:250px;right: 0;top:0;bottom: 0;overflow: auto;">
+      <!--      <div style="min-width: 600px; width: 70%;" id="wiki-content">-->
+      <div style="margin: 20px;" id="wiki-content">
+        <div class="bar7" style="position: relative;">
+          <input type="text" onblur="onBlur()" oninput="OnInput(event)" placeholder="请输入您要搜索的内容..." />
+          <div id="search-res" style="position: absolute;top:40px">
+            <ul class="dropdown-content">
+            </ul>
+          </div>
+        </div>
+
+        <div class="wiki-category" v-for="item of sortedArticles" :key="item.folderName">
+          <h3 class="wiki-category-name" :id="item.folderName">{{ item.folderName }}</h3>
+          <div class="wiki-category-list">
+            <ul>
+              <li class="pagelist" v-for="at of item.articles" :key="at.title">
+                <nuxt-link :to="{name: 'wiki-content-slug', params: {slug: at.slug }}">{{ at.title }}</nuxt-link>
+              </li>
+              <li class="pagelist" v-for="sub of item.children" :key="sub.folderName">
                 <span class="wiki-collection">
                     <fa class="fa" :icon="['fas', 'folder']" />&nbsp;
                     {{ sub.folderName }}
                 </span>
-              <ul>
+                <ul>
                   <span v-for="at of sub.articles" :key="at.title">
                     <nuxt-link
                       :to="{name: 'wiki-content-slug', params: {slug: at.slug }}">{{ at.title || at.slug }}</nuxt-link>
                   &nbsp;/&nbsp;
                   </span>
-              </ul>
-            </li>
-          </ul>
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-
-    <div id="toc" style="padding-top:1rem;padding-right: 40px;overflow: auto;left: 88%;"
-         class="sidebar-content toc-fixed">
-      <nav id="TableOfContents">
-        <ul>
-          <li v-for="item of sortedArticles">
-            <a :href="`#${item.folderName}`">{{ item.folderName }}</a>
-          </li>
-        </ul>
-      </nav>
     </div>
 
   </section>
@@ -107,9 +112,30 @@ export default {
 }
 </script>
 
-<style scoped>
-  .content {
-    margin: 0 auto;
+<style scoped lang="scss">
+
+  .wiki-category-aside {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    overflow: auto;
+
+    ul {
+      list-style: none;
+      padding-left: 20px;
+    }
+
+    li {
+      list-style: none;
+      margin: 10px 15px;
+      font-size: 14px;
+    }
+
+    a {
+      color: $fg-color;
+    }
   }
 
   .wiki-category-name {

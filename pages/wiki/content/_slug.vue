@@ -1,35 +1,37 @@
 <template>
-  <section class="container post">
-    <article>
-      <ArticleHeader :article="article" />
-      <aside ref="body-wrapper" id="body-wrapper">
-        <div id="contents" ref="contents"
-             :class="{'co-width-12': pageLoaded && !tocVisible }"
-             class="body-content co-width-10">
-          <nuxt-content :document="article" />
-          <prev-next routerName="wiki-content-slug" :prev="prev" :next="next" />
-        </div>
-        <div class="sidebar co-width-2"
-             style="padding-left: 12px;"
-             v-show="pageLoaded && tocVisible">
-          <div ref="toc-slider" class="toc-fixed">
-            <nav id="TableOfContents">
-              <ul>
-                <li v-for="link of article.toc" :key="link.id"
-                    :style="{'text-indent': `${(link.depth - 1) * 8}px`}"
-                    :class="{ 'py-2': link.depth === 2, 'ml-2 pb-2': link.depth === 3 }">
-                  <a :href="`#${link.id}`"> {{ link.text }} </a>
-                </li>
-              </ul>
-            </nav>
-            <a href="#" id="tap-to-top">
-              <fa :icon="['fas', 'arrow-up']" />
-            </a>
+  <div class="content">
+    <section class="container post">
+      <article>
+        <ArticleHeader :article="article" />
+        <aside ref="body-wrapper" id="body-wrapper">
+          <div id="contents" ref="contents"
+               :class="{'co-width-12': pageLoaded && !tocVisible }"
+               class="body-content co-width-10">
+            <nuxt-content :document="article" />
+            <prev-next routerName="wiki-content-slug" :prev="prev" :next="next" />
           </div>
-        </div>
-      </aside>
-    </article>
-  </section>
+          <div class="sidebar co-width-2"
+               style="padding-left: 12px;"
+               v-show="pageLoaded && tocVisible">
+            <div ref="toc-slider" class="toc-fixed">
+              <nav id="TableOfContents">
+                <ul>
+                  <li v-for="link of article.toc" :key="link.id"
+                      :style="{'text-indent': `${(link.depth - 1) * 8}px`}"
+                      :class="{ 'py-2': link.depth === 2, 'ml-2 pb-2': link.depth === 3 }">
+                    <a :href="`#${link.id}`"> {{ link.text }} </a>
+                  </li>
+                </ul>
+              </nav>
+              <a href="#" id="tap-to-top">
+                <fa :icon="['fas', 'arrow-up']" />
+              </a>
+            </div>
+          </div>
+        </aside>
+      </article>
+    </section>
+  </div>
 </template>
 
 <script>

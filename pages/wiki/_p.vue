@@ -1,14 +1,16 @@
 <template>
-  <ArticleList title="Wiki"
-               router-name="wiki-content-slug"
-               :articles="articles">
-
-    <Pagination
-      route-name='wiki-p'
-      :page-num="pageNum"
-      :page-count="pageCount" />
-
-  </ArticleList>
+  <div>
+    <blog-header />
+    <ArticleList title="Wiki"
+                 router-name="wiki-content-slug"
+                 :articles="articles">
+      <Pagination
+        route-name='wiki-p'
+        :page-num="pageNum"
+        :page-count="pageCount" />
+    </ArticleList>
+    <blog-footer />
+  </div>
 </template>
 
 <script>

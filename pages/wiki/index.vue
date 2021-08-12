@@ -1,20 +1,20 @@
 <template>
-  <section class="wiki-index">
+  <section class="content">
+
     <div class="wiki-category-aside">
       <NuxtLink :to="{ name: 'index' }"
-                style="padding-top: 20px;display: flex;align-items:center;justify-content:center;">
+                class="navigation">
         <fa class="fa" :icon="['fas', 'arrow-left']" />
         <span style="margin-left: 8px;">Go back</span>
       </NuxtLink>
       <ul>
         <li v-for="item of sortedArticles">
-          <a :href="`#${item.folderName}`">{{ item.folderName }}</a>
+          <a :href="`#id-${item.folderName}`">{{ item.folderName }}</a>
         </li>
       </ul>
     </div>
 
     <div style="position:absolute;left:250px;right: 0;top:0;bottom: 0;overflow: auto;">
-      <!--      <div style="min-width: 600px; width: 70%;" id="wiki-content">-->
       <div style="margin: 20px;" id="wiki-content">
         <div class="bar7" style="position: relative;">
           <input type="text" onblur="onBlur()" oninput="OnInput(event)" placeholder="请输入您要搜索的内容..." />
@@ -25,11 +25,12 @@
         </div>
 
         <div class="wiki-category" v-for="item of sortedArticles" :key="item.folderName">
-          <h3 class="wiki-category-name" :id="item.folderName">{{ item.folderName }}</h3>
+          <h3 :id="`id-${item.folderName}`">{{ item.folderName }}</h3>
           <div class="wiki-category-list">
             <ul>
               <li class="pagelist" v-for="at of item.articles" :key="at.title">
-                <nuxt-link :to="{name: 'wiki-content-slug', params: {slug: at.slug }}">{{ at.title }}</nuxt-link>
+                <nuxt-link :to="{name: 'wiki-content-slug', params: {slug: at.slug }}">{{ at.title }}
+                </nuxt-link>
               </li>
               <li class="pagelist" v-for="sub of item.children" :key="sub.folderName">
                 <span class="wiki-collection">
@@ -104,13 +105,19 @@ export default {
     return { sortedArticles }
   },
   data () {
-    return {}
+    return {
+      sortedArticles: []
+    }
   },
   mounted () {
   },
   methods: {}
 }
 </script>
+
+<style lang="scss">
+
+</style>
 
 <style scoped lang="scss">
 
@@ -122,6 +129,18 @@ export default {
     width: 250px;
     overflow: auto;
 
+    a {
+      // 需深入理解
+      color: inherit;
+    }
+
+    .navigation {
+      padding-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     ul {
       list-style: none;
       padding-left: 20px;
@@ -130,45 +149,56 @@ export default {
     li {
       list-style: none;
       margin: 10px 15px;
-      font-size: 14px;
+
+      .title {
+        font-size: 14px;
+        font-weight: 400;
+      }
     }
-
-    a {
-      color: $fg-color;
-    }
   }
 
-  .wiki-category-name {
-    float: right;
-    text-align: right;
-    word-wrap: break-word;
-  }
-
-  .wiki-category-list li.pagelist {
-    width: 85%;
-    margin-right: 1.5em;
-  }
-
-  .wiki-category-list ul {
-    padding-left: 1em;
-  }
 
   .wiki-category {
     border-bottom: 1px solid #ccc;
     min-height: 3em;
+
+    :last-child {
+      border-bottom: none;
+    }
+
+    h3 {
+      float: right;
+      text-align: right;
+      word-wrap: break-word;
+      padding-top: 100px;
+      margin-top: -100px;
+    }
+
+    .wiki-category-list {
+      ul li {
+        margin-top: 0;
+      }
+
+      ul {
+        padding-left: 1em;
+      }
+
+      li.pagelist {
+        width: 85%;
+        margin-right: 1.5em;
+        display: block;
+
+        ul {
+          margin: 0;
+        }
+
+        a {
+          color: inherit;
+        }
+      }
+    }
   }
 
-  .wiki-category:last-child {
-    border-bottom: none;
-  }
-
-  .wiki-category-list ul li {
-    margin-top: 0;
-  }
-
-  .wiki-category-name {
-    margin-top: 0;
-  }
 
   .wiki-collection {
     font-weight: 500;
@@ -181,32 +211,21 @@ export default {
     }
   }
 
-  .wiki-category-name {
-    padding-top: 100px;
-    margin-top: -100px;
+  #wiki-content {
+    a {
+      font-weight: 400;
+    }
+
+    ol,
+    ul {
+      list-style: none;
+    }
   }
 
-  #TableOfContents {
-    margin-top: 40px;
-  }
+  /*body.colorscheme-dark #wiki-content a {*/
+  /*  color: #dadada;*/
+  /*}*/
 
-  #wiki-content a {
-    color: #333333;
-    font-family: -apple-system, system-ui, Segoe UI, Roboto, Ubuntu, Cantarell,
-    Noto Sans, sans-serif, BlinkMacSystemFont, Helvetica Neue, PingFang SC,
-    Hiragino Sans GB, Microsoft YaHei, Arial;
-    font-weight: 400;
-  }
-
-  body.colorscheme-dark #wiki-content a {
-    color: #dadada;
-  }
-
-  #wiki-content ol,
-  #wiki-content ul {
-    list-style: none;
-    /*padding-left: 20px;*/
-  }
 
   /*    search bar  */
   .bar7 {

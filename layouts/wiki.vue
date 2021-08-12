@@ -24,6 +24,11 @@ export default Vue.extend({
       lightScheme: false,
     }
   },
+  created(): void {
+    this.$root.$on('darkModeChanged', () => {
+      this.switchTheme(!this.lightScheme)
+    })
+  },
   methods: {
     switchTheme(isLight: boolean) {
       this.autoScheme = false;

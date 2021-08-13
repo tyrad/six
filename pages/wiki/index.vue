@@ -2,11 +2,10 @@
   <section class="content">
 
     <div class="wiki-category-aside" ref="aside">
-      <NuxtLink :to="{ name: 'index' }"
-                class="navigation">
+      <div @click="mxGoBack" class="navigation">
         <fa class="fa" :icon="['fas', 'arrow-left']" />
         <span style="margin-left: 8px;">Go back</span>
-      </NuxtLink>
+      </div>
       <ul>
         <li v-for="item of sortedArticles">
           <a :href="`#id-${item.folderName}`">{{ item.folderName }}</a>
@@ -15,7 +14,7 @@
     </div>
 
     <div ref="wiki-content-wrap" id="wiki-content-wrap"
-         style="position:absolute;left:250px;right: 0;top:0;bottom: 0;overflow: auto;">
+         class="wiki-content-aside">
       <div style="margin: 20px;" id="wiki-content">
         <div class="bar7" style="position: relative;">
           <input type="text" onblur="onBlur()" oninput="OnInput(event)" placeholder="请输入您要搜索的内容..." />
@@ -57,45 +56,12 @@
 
 <script>
 
-const sort = {
-  sortArticles (articles) {
-    let sortedArticles = []
-    for (const article of articles) {
-      let path = article.path;
-      let paths = path.substr('/wiki/'.length, path.length).split('/')
-      paths.pop()
-      let subFolder = sortedArticles;
-      for (let [idx, p] of paths.entries()) {
-        let el = this.getFolder(p, subFolder);
-        subFolder = el.children;
-        if (idx === paths.length - 1) {
-          el['articles'].push(article);
-        }
-      }
-    }
-    return sortedArticles;
-  },
-  getFolder (name, children) {
-    let filtered = children.filter(item => {
-      return item['folderName'] === name
-    });
-    if (filtered.length === 0) {
-      // 没有找到
-      let newEle = {
-        folderName: name,
-        articles: [],
-        children: []
-      };
-      children.push(newEle)
-      return newEle;
-    } else {
-      return filtered[0];
-    }
-  }
-}
+import goBackMixin from "@/mixin/goback"
+import sort from "@/utils/sortArticle"
 
 export default {
   name: "wiki",
+  mixins: [goBackMixin],
   async asyncData ({ $content, params }) {
     const articles = await $content('wiki', { deep: true })
       /// 坑点： dev启动是有path的。generate默认没有path，需要手动加上
@@ -144,48 +110,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
-
-</style>
-
 <style scoped lang="scss">
-
-  .wiki-category-aside {
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 250px;
-    overflow: auto;
-
-    a {
-      // 需深入理解
-      color: inherit;
-    }
-
-    .navigation {
-      padding-top: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    ul {
-      list-style: none;
-      padding-left: 20px;
-    }
-
-    li {
-      list-style: none;
-      margin: 10px 15px;
-
-      .title {
-        font-size: 14px;
-        font-weight: 400;
-      }
-    }
-  }
-
 
   .wiki-category {
     border-bottom: 1px solid #ccc;

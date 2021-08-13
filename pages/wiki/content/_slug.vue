@@ -1,36 +1,47 @@
 <template>
   <div class="content">
-    <section class="container post">
-      <article>
-        <ArticleHeader :article="article" />
-        <aside ref="body-wrapper" id="body-wrapper">
-          <div id="contents" ref="contents"
-               :class="{'co-width-12': pageLoaded && !tocVisible }"
-               class="body-content co-width-10">
-            <nuxt-content :document="article" />
-            <prev-next routerName="wiki-content-slug" :prev="prev" :next="next" />
-          </div>
-          <div class="sidebar co-width-2"
-               style="padding-left: 12px;"
-               v-show="pageLoaded && tocVisible">
-            <div ref="toc-slider" class="toc-fixed">
-              <nav id="TableOfContents">
-                <ul>
-                  <li v-for="link of article.toc" :key="link.id"
-                      :style="{'text-indent': `${(link.depth - 1) * 8}px`}"
-                      :class="{ 'py-2': link.depth === 2, 'ml-2 pb-2': link.depth === 3 }">
-                    <a :href="`#${link.id}`"> {{ link.text }} </a>
-                  </li>
-                </ul>
-              </nav>
-              <a href="#" id="tap-to-top">
-                <fa :icon="['fas', 'arrow-up']" />
-              </a>
+    <div class="wiki-category-aside" ref="aside">
+      <div @click="mxGoBack"
+           class="navigation">
+        <fa class="fa" :icon="['fas', 'arrow-left']" />
+        <span style="margin-left: 8px;">Go back</span>
+      </div>
+      <Tree :treeData="sideCategory" />
+    </div>
+
+    <div class="wiki-content-aside" ref="wiki-content">
+      <section class="container post" style="width:100%;">
+        <article>
+          <ArticleHeader :article="article" />
+          <aside ref="body-wrapper" id="body-wrapper">
+            <div id="contents" ref="contents"
+                 :class="{'co-width-12': pageLoaded && !tocVisible }"
+                 class="body-content co-width-10">
+              <nuxt-content :document="article" />
+              <prev-next routerName="wiki-content-slug" :prev="prev" :next="next" />
             </div>
-          </div>
-        </aside>
-      </article>
-    </section>
+            <div class="sidebar co-width-2"
+                 style="padding-left: 12px;"
+                 v-show="pageLoaded && tocVisible">
+              <div ref="toc-slider" class="toc-fixed">
+                <nav id="TableOfContents">
+                  <ul>
+                    <li v-for="link of article.toc" :key="link.id"
+                        :style="{'text-indent': `${(link.depth - 1) * 8}px`}"
+                        :class="{ 'py-2': link.depth === 2, 'ml-2 pb-2': link.depth === 3 }">
+                      <a :href="`#${link.id}`"> {{ link.text }} </a>
+                    </li>
+                  </ul>
+                </nav>
+                <a href="#" id="tap-to-top">
+                  <fa :icon="['fas', 'arrow-up']" />
+                </a>
+              </div>
+            </div>
+          </aside>
+        </article>
+      </section>
+    </div>
   </div>
 </template>
 
@@ -39,6 +50,22 @@
 // TODO: 待修改完主题风格，可以精简重复代码
 
 import ArticleHeader from "@/components/ArticleHeader"
+import goBackMixin from "@/mixin/goback"
+import sort from "@/utils/sortArticle"
+
+const generateAside = async (dir, $content) => {
+  // 查到所在目录dir: /wiki/iOS/Abc ->  iOS
+  let wikiSubDirName = dir.substring('/wiki/'.length)
+  if (wikiSubDirName.indexOf("/") > -1) {
+    wikiSubDirName = wikiSubDirName.substring(0, wikiSubDirName.indexOf("/"))
+  }
+  const relatedArticles = await $content('/wiki/' + wikiSubDirName, { deep: true })
+    /// 坑点： dev启动是有path的。generate默认没有path，需要手动加上
+    .only(['title', 'date', 'slug', 'path'])
+    .sortBy('date', 'desc')
+    .fetch();
+  return sort.sortArticles(relatedArticles);
+}
 
 export default {
   components: { ArticleHeader },
@@ -52,13 +79,15 @@ export default {
       error({ statusCode: 404, message: '' });
     }
     const article = articles[0];
+    const sideCategory = await generateAside(article.dir, $content)
     const [prev, next] = await $content('wiki', { deep: true })
       .only(['title', 'slug'])
       .sortBy('date', 'asc')
       .surround(params.slug)
       .fetch()
-    return { article, prev, next, scrollTop }
+    return { article, prev, next, scrollTop, sideCategory }
   },
+  mixins: [goBackMixin],
   data () {
     return {
       pageLoaded: false,
@@ -102,21 +131,23 @@ export default {
     },
     handleTocFixed () {
       this.hTags = this.$refs["contents"].querySelectorAll("h1,h2,h3,h4,h5");
-      window.addEventListener("scroll", this.onScroll);
+      // window.addEventListener("scroll", this.onScroll);
+      this.$refs["wiki-content"].addEventListener("scroll", this.onScroll);
       this.onScroll();
     },
     onScroll () {
       // for layout
       const topWrapperOffsetTop = this.$refs["body-wrapper"].offsetTop;
       const toc = this.$refs["toc-slider"];
-      const scrollTop1 = document.documentElement.scrollTop || document.body.scrollTop;
+      //const scrollTop1 = document.documentElement.scrollTop || document.body.scrollTop;
+      const scrollTop1 = this.$refs["wiki-content"].scrollTop;
       if (scrollTop1 > topWrapperOffsetTop - 15) {
         toc.classList.add("toc-fixed");
       } else {
         toc.classList.remove("toc-fixed");
       }
-      // for hash
-      let scrollTop = window.pageYOffset - topWrapperOffsetTop;
+      //let scrollTop = window.pageYOffset - topWrapperOffsetTop;
+      let scrollTop = scrollTop1 - topWrapperOffsetTop;
       let result = Array.from(this.hTags).filter(i => {
         return i.offsetTop < scrollTop;
       })
@@ -137,6 +168,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  .wiki-content-aside {
+    margin: 0;
+    padding-right: 0;
+    max-width: 100% !important;
+    padding-bottom: 20px;
 
+  }
 </style>

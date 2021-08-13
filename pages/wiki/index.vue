@@ -1,7 +1,7 @@
 <template>
   <section class="content">
 
-    <div class="wiki-category-aside">
+    <div class="wiki-category-aside" ref="aside">
       <NuxtLink :to="{ name: 'index' }"
                 class="navigation">
         <fa class="fa" :icon="['fas', 'arrow-left']" />
@@ -14,7 +14,8 @@
       </ul>
     </div>
 
-    <div style="position:absolute;left:250px;right: 0;top:0;bottom: 0;overflow: auto;">
+    <div ref="wiki-content-wrap" id="wiki-content-wrap"
+         style="position:absolute;left:250px;right: 0;top:0;bottom: 0;overflow: auto;">
       <div style="margin: 20px;" id="wiki-content">
         <div class="bar7" style="position: relative;">
           <input type="text" onblur="onBlur()" oninput="OnInput(event)" placeholder="请输入您要搜索的内容..." />
@@ -106,12 +107,40 @@ export default {
   },
   data () {
     return {
+      hTags: [],
+      sideCategories: [],
       sortedArticles: []
     }
   },
   mounted () {
+    this.asideList = this.$refs["aside"].querySelectorAll('a');
+    this.hTags = this.$refs["wiki-content-wrap"].querySelectorAll("h3");
+    document.getElementById("wiki-content-wrap").addEventListener("scroll", this.onScroll);
+    this.onScroll();
   },
-  methods: {}
+  methods: {
+    onScroll () {
+      // for layout
+      const topWrapperOffsetTop = document.getElementById("wiki-content-wrap").scrollTop;
+      console.log(topWrapperOffsetTop);
+      let scrollTop = topWrapperOffsetTop + 100;
+      let result = Array.from(this.hTags).filter(i => {
+        return i.offsetTop < scrollTop;
+      })
+      if (result.length === 0) {
+        return;
+      }
+      const seg = result.pop();
+      for (const ele of this.asideList) {
+        ele.classList.remove("highlighted");
+      }
+      console.log(this.asideList);
+      let ele2 = this.$refs["aside"].querySelector(`a[href='#${(seg.id)}']`)
+      if (ele2) {
+        ele2.classList.add("highlighted");
+      }
+    }
+  }
 }
 </script>
 
@@ -271,4 +300,7 @@ export default {
     width: 100%;
   }
 
+  a.highlighted {
+    color: #79aae6;
+  }
 </style>

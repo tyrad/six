@@ -21,7 +21,7 @@ import Pagination from "@/components/Pagination"
 const pagination = {
   getPostsOfPage ($content, page) {
     return $content('wiki', { deep: true })
-      .only(['title', 'date', 'slug'])
+      .only(['title', 'date', 'slug', 'path'])
       .sortBy('date', 'desc')
       .skip(15 * (page - 1))
       .limit(15)

@@ -1,6 +1,6 @@
 <template>
   <section class="container list">
-    <div style="margin: 0 auto;max-width: 400px;text-align: center;padding-top: 100px;">
+    <div style="margin: 0 auto;max-width: 400px;text-align: center;padding-top: 100px;font-weight: 500;">
       天高地迥，觉宇宙之无穷； <br>
       兴尽悲来，识盈虚之有数。 <br>
       望长安于日下，目吴会于云间。<br>

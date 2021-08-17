@@ -16,13 +16,14 @@
     <div ref="wiki-content-wrap" id="wiki-content-wrap"
          class="wiki-content-aside">
       <div style="margin: 20px;" id="wiki-content">
-        <div class="bar7" style="position: relative;">
-          <input type="text" onblur="onBlur()" oninput="OnInput(event)" placeholder="请输入您要搜索的内容..." />
-          <div id="search-res" style="position: absolute;top:40px">
-            <ul class="dropdown-content">
-            </ul>
-          </div>
-        </div>
+
+<!--        <div class="bar7" style="position: relative;">-->
+<!--          <input type="text" :onblur="onInput" v-model="searchKey" :oninput="onInput()" placeholder="请输入您要搜索的内容..." />-->
+<!--          <div id="search-res" style="position: absolute;top:40px">-->
+<!--            <ul class="dropdown-content">-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <div class="wiki-category" v-for="item of sortedArticles" :key="item.folderName">
           <h3 :id="`id-${item.folderName}`">{{ item.folderName }}</h3>
@@ -73,6 +74,7 @@ export default {
   },
   data () {
     return {
+      searchKey: '',
       hTags: [],
       sideCategories: [],
       sortedArticles: []
@@ -100,17 +102,25 @@ export default {
       for (const ele of this.asideList) {
         ele.classList.remove("highlighted");
       }
-      console.log(this.asideList);
       let ele2 = this.$refs["aside"].querySelector(`a[href='#${(seg.id)}']`)
       if (ele2) {
         ele2.classList.add("highlighted");
       }
+    },
+    async onInput () {
+      console.log(this.searchKey);
+      const articles = await this.$content('articles').search('title', this.searchKey).fetch()
+      console.log(articles)
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+
+  main.colorscheme-dark a {
+    color: inherit;
+  }
 
   .wiki-category {
     border-bottom: 1px solid #ccc;

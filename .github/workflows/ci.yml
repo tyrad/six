@@ -45,6 +45,18 @@ jobs:
       - name: Install dependencies 👨🏻‍💻
         run: yarn
 
+      - name: Generate
+        run: yarn run generate
 
-      - name: Run tests 🧪
-        run: yarn test
+      - name: Publish
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB_ACTION }}
+        with:
+          source-directory: 'dist'
+          destination-github-username: 'tyrad'
+          destination-repository-name: 'tyrad.github.io'
+          user-email: tyradccc@gmail.com
+
+#      - name: Run tests 🧪
+#        run: yarn test

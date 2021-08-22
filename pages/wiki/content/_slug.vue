@@ -33,7 +33,7 @@
                     </li>
                   </ul>
                 </nav>
-                <a href="#" id="tap-to-top">
+                <a href="#" id="tap-to-top" @click="clickToTop">
                   <fa :icon="['fas', 'arrow-up']" />
                 </a>
               </div>
@@ -59,12 +59,15 @@ const generateAside = async (dir, $content) => {
   if (wikiSubDirName.indexOf("/") > -1) {
     wikiSubDirName = wikiSubDirName.substring(0, wikiSubDirName.indexOf("/"))
   }
-  const relatedArticles = await $content('/wiki/' + wikiSubDirName, { deep: true })
+  const relatedArticles = await $content('wiki' , { deep: true })
     /// 坑点： dev启动是有path的。generate默认没有path，需要手动加上
     .only(['title', 'date', 'slug', 'path'])
-    .sortBy('date', 'desc')
+    // .sortBy('title', 'desc')
     .fetch();
-  return sort.sortArticles(relatedArticles);
+  let sorted  = sort.sortArticles(relatedArticles);
+  return sorted.filter(item => {
+    return item.folderName === wikiSubDirName
+  })
 }
 
 export default {
@@ -79,9 +82,10 @@ export default {
       error({ statusCode: 404, message: '' });
     }
     const article = articles[0];
+    // todo add promise all
     const sideCategory = await generateAside(article.dir, $content)
     const [prev, next] = await $content('wiki', { deep: true })
-      .only(['title', 'slug'])
+      .only(['title', 'slug', 'date'])
       .sortBy('date', 'asc')
       .surround(params.slug)
       .fetch()
@@ -120,6 +124,10 @@ export default {
     window.removeEventListener('scroll', this.onScroll)
   },
   methods: {
+    clickToTop() {
+
+      this.$refs["wiki-content"].scrollTop = 0
+    },
     hashScrollInitial () {
       const hash = this.$route.hash;
       if (hash) {

@@ -1,6 +1,7 @@
 name: ci
 
 on:
+  repository_dispatch:
   push:
     branches:
       - main
@@ -9,7 +10,6 @@ on:
     branches:
       - main
       - master
-  repository_dispatch:​
 
 jobs:
   ci:

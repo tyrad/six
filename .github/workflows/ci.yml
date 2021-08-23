@@ -10,8 +10,6 @@ on:
       - main
       - master
   repository_dispatch:​
-    types:
-      - sub_commit​
 
 jobs:
   ci:

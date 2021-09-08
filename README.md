@@ -171,4 +171,29 @@ seo优化
 
 搜索功能
 
-wiki详情的显示页面
+wiki详情的显示页面 左侧的自动定位
+
+
+1. ok github action  https://www.houzhenni.com/blog/nuxt-blog-generate-files-n-push-to-another-repo
+2. 结合git submodule
+3. 自定义域名
+
+评论功能等
+
+https://github.com/marketplace/actions/checkout-submodules
+
+
+
+git submodule add https://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@github.com/tyrad/blog-content.git content
+git submodule update
+
+// 更新
+
+nginx playgroud
+
+结合阿里云函数
+
+ation trigger another
+https://www.cnblogs.com/aedjesse/p/14362530.html
+
+

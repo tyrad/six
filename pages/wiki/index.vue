@@ -105,9 +105,7 @@ export default {
       let ele2 = this.$refs["aside"].querySelector(`a[href='#${(seg.id)}']`)
       if (ele2) {
         ele2.classList.add("highlighted");
-        if (!isScrolledIntoView(ele2)) {
-          ele2.scrollIntoView();
-        }
+        isScrolledIntoView(ele2)
       }
     },
     async onInput () {

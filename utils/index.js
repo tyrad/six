@@ -364,12 +364,15 @@ export function removeClass (ele, cls) {
 }
 
 
-export function isScrolledIntoView(el) {
+export function isScrolledIntoView(el, autoScroll = true) {
   const rect = el.getBoundingClientRect();
   const elemTop = rect.top;
   const elemBottom = rect.bottom;
   // Only completely visible elements return true:
   // Partially visible elements return true:
   //isVisible = elemTop < window.innerHeight && elemBottom >= 0;
-  return (elemTop >= 0) && (elemBottom <= window.innerHeight);
+  const visible =  (elemTop >= 0) && (elemBottom <= window.innerHeight);
+  if (!visible && autoScroll) {
+    el.scrollIntoView();
+  }
 }

@@ -35,6 +35,7 @@
 <script>
 
 import ArticleHeader from "@/components/ArticleHeader"
+import { isScrolledIntoView }from "@/utils/index.js";
 
 export default {
   components: { ArticleHeader },
@@ -127,6 +128,7 @@ export default {
       let ele2 = toc.querySelector(`a[href='#${(seg.id)}']`)
       if (ele2) {
         ele2.classList.add("highlighted");
+        isScrolledIntoView(ele2);
       }
     }
   }

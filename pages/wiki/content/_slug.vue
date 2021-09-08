@@ -6,7 +6,7 @@
         <fa class="fa" :icon="['fas', 'arrow-left']" />
         <span style="margin-left: 8px;">Go back</span>
       </div>
-      <Tree :treeData="sideCategory" />
+      <Tree :treeData="sideCategory" :selected="article.title"/>
     </div>
 
     <div class="wiki-content-aside" ref="wiki-content">
@@ -18,7 +18,7 @@
                  :class="{'co-width-12': pageLoaded && !tocVisible }"
                  class="body-content co-width-10">
               <nuxt-content :document="article" />
-              <prev-next routerName="wiki-content-slug" :prev="prev" :next="next" />
+              <!-- <prev-next routerName="wiki-content-slug" :prev="prev" :next="next" /> -->
             </div>
             <div class="sidebar co-width-2"
                  style="padding-left: 12px;"
@@ -52,6 +52,7 @@
 import ArticleHeader from "@/components/ArticleHeader"
 import goBackMixin from "@/mixin/goback"
 import sort from "@/utils/sortArticle"
+import { isScrolledIntoView }from "@/utils/index.js";
 
 const generateAside = async (dir, $content) => {
   // 查到所在目录dir: /wiki/iOS/Abc ->  iOS
@@ -112,6 +113,7 @@ export default {
       this.pageLoaded = true;
       this.$nextTick(() => {
         this.handleTocFixed();
+        this.updateLeftSideSelected();
       })
     }
   },
@@ -119,13 +121,19 @@ export default {
     this.hashScrollInitial();
     this.pageLoaded = true;
     this.handleTocFixed();
+    this.updateLeftSideSelected();
   },
   destroyed () {
     window.removeEventListener('scroll', this.onScroll)
   },
   methods: {
+    updateLeftSideSelected() {
+      const eles = document.getElementsByClassName('side-highlighted')
+      if(eles.length) {
+        isScrolledIntoView(eles[0]);
+      }
+    },
     clickToTop() {
-
       this.$refs["wiki-content"].scrollTop = 0
     },
     hashScrollInitial () {
@@ -170,6 +178,7 @@ export default {
       let ele2 = toc.querySelector(`a[href='#${(seg.id)}']`)
       if (ele2) {
         ele2.classList.add("highlighted");
+        isScrolledIntoView(ele2);
       }
     }
   }

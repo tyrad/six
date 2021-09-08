@@ -2,6 +2,7 @@ name: ci
 
 on:
   repository_dispatch:
+    types: [sample_push]
   push:
     branches:
       - main

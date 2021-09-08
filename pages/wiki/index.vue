@@ -59,6 +59,7 @@
 
 import goBackMixin from "@/mixin/goback"
 import sort from "@/utils/sortArticle"
+import { isScrolledIntoView }from "@/utils/index.js";
 
 export default {
   name: "wiki",
@@ -90,7 +91,6 @@ export default {
     onScroll () {
       // for layout
       const topWrapperOffsetTop = document.getElementById("wiki-content-wrap").scrollTop;
-      console.log(topWrapperOffsetTop);
       let scrollTop = topWrapperOffsetTop + 100;
       let result = Array.from(this.hTags).filter(i => {
         return i.offsetTop < scrollTop;
@@ -105,12 +105,13 @@ export default {
       let ele2 = this.$refs["aside"].querySelector(`a[href='#${(seg.id)}']`)
       if (ele2) {
         ele2.classList.add("highlighted");
+        if (!isScrolledIntoView(ele2)) {
+          ele2.scrollIntoView();
+        }
       }
     },
     async onInput () {
-      console.log(this.searchKey);
       const articles = await this.$content('articles').search('title', this.searchKey).fetch()
-      console.log(articles)
     }
   }
 }

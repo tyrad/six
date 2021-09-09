@@ -1,10 +1,14 @@
 <template>
   <div class="content">
     <div class="wiki-category-aside" ref="aside">
-      <div @click="mxGoBack"
-           class="navigation">
-        <fa class="fa" :icon="['fas', 'arrow-left']" />
-        <span style="margin-left: 8px;">Go back</span>
+      <div class="navigation">
+        <div @click="mxGoBack">
+          <fa class="fa" :icon="['fas', 'arrow-left']" />
+          <span style="margin-left: 8px;">Go back</span>
+        </div>
+        <div style="padding: 0 20px;" @click="mxGohome">
+          Home
+        </div>
       </div>
       <Tree :treeData="sideCategory" :selected="article.title"/>
     </div>

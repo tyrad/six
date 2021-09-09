@@ -5,6 +5,9 @@ export default {
     },
     mxHasHistory () {
       return window.history.length > 2
+    },
+    mxGohome() {
+      this.$router.push('/')
     }
   }
 }

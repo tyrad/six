@@ -46,6 +46,12 @@ export default [
         name: "RSA测试",
         meta: {},
       },
+      {
+        path: "https://wangchujiang.com/linux-command/",
+        name: "linux命令",
+        outLink: true,
+        meta: {},
+      },
     ],
   },
   {

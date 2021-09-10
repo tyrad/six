@@ -30,7 +30,13 @@
             v-if="item.children && item.children.length > 0"
           >
             <li v-for="subItem in item.children" :key="subItem.path">
-              <nuxt-link :to="{name: subItem.path, params: subItem.params}"> {{ subItem.name }}</nuxt-link>
+              <div v-if="!subItem.outLink">
+                <nuxt-link :to="{name: subItem.path, params: subItem.params}"> {{ subItem.name }}</nuxt-link>
+              </div>
+              <div v-else class="flex-align-center flex-y-center">
+                <fa class="out-icon" :icon="['fas', 'link']" />
+                <a class="out-link" :href="subItem.path" target="_Blank"> {{ subItem.name }}</a>
+              </div>
             </li>
           </ul>
         </li>
@@ -80,4 +86,16 @@ export default {
   @import "@/assets/style/header/navigation";
   @import "@/assets/style/header/navigation_dark";
   /*  巧妙的使用 input+label  结合css,控制显示隐藏，没有用到一行js代码 */
+
+  .out-link {
+    font-size: 13px;
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+  }
+
+  .out-icon {
+    margin-left: 3px;
+    font-size: 13px
+  }
+
 </style>

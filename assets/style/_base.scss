@@ -253,3 +253,20 @@ img.emoji {
 .toc-fixed #tap-to-top {
   display: inline-block !important;
 }
+
+// flex精简
+.flex {
+  display: flex;
+}
+
+// 垂直方向居中(y-center)
+.flex-y-center {
+  display: flex;
+  justify-content: center;
+}
+
+// 元素中间对齐
+.flex-align-center {
+  display: flex;
+  align-items: center;
+}

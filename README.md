@@ -178,6 +178,8 @@ wiki详情的显示页面 左侧的自动定位
 2. 结合git submodule
 3. 自定义域名
 
+
+
 评论功能等
 
 https://github.com/marketplace/actions/checkout-submodules
@@ -186,6 +188,8 @@ https://github.com/marketplace/actions/checkout-submodules
 
 git submodule add https://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@github.com/tyrad/blog-content.git content
 git submodule update
+
+git submodule update --init --recursive --remote
 
 // 更新
 

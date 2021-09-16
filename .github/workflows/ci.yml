@@ -29,7 +29,7 @@ jobs:
 #        with:
 #          submodules: recursive
       - name: Checkout submodules
-        run: git submodule update --init --recursive
+        run: git submodule update --init --recursive --remote
       - name: Setup node env 🏗
         uses: actions/setup-node@v2.1.5
         with:

@@ -64,6 +64,7 @@ jobs:
           destination-github-username: 'tyrad'
           destination-repository-name: 'tyrad.github.io'
           user-email: tyradccc@gmail.com
+          target-branch: master
 
 #      - name: Run tests 🧪
 #        run: yarn test

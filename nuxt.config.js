@@ -42,20 +42,23 @@ export default {
     // https://go.nuxtjs.dev/typescript
     '@nuxt/typescript-build',
     '@nuxtjs/style-resources',
+    ['nuxt-compress'],
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxt/content',
-    // ['nuxt-fontawesome', {
-    //   component: 'fa',
-    //   imports: [
-    //     {
-    //       set: '@fortawesome/free-solid-svg-icons',
-    //       icons: ['fas']
-    //     }
-    //   ]
-    // }]
+    [
+      'nuxt-compress',
+      {
+        gzip: {
+          threshold: 8192,
+        },
+        brotli: {
+          threshold: 8192,
+        },
+      },
+    ]
   ],
   //for  @nuxt-content
   content: {

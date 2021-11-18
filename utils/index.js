@@ -28,7 +28,7 @@ export function parseTime (time, cFormat) {
         time = parseInt(time)
       } else {
         // support safari
-        // https://stackoverflow.com/questions/4310953/invalid-date-in-safari
+        // https://stackoverflow.com/questions/4310953/invalid-date-in-safari  斜杠 和 空格问题
         time = time.replace(new RegExp(/-/gm), '/')
       }
     }

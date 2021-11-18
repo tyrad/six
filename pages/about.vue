@@ -9,6 +9,10 @@
       萍水相逢，尽是他乡之客。<br>
       ...<br>
       <span style="float:right;">——王勃《滕王序》</span>
+
+      <font-awesome-icon icon="arrow-up" />
+      <font-awesome-icon icon="bars" />
+
     </div>
   </section>
 </template>

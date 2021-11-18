@@ -3,7 +3,7 @@
     <div class="wiki-category-aside" ref="aside">
       <div class="navigation">
         <div @click="mxGoBack">
-          <fa class="fa" :icon="['fa', 'arrow-left']" />
+          <fa class="fa" icon="arrow-left" />
           <span style="margin-left: 8px;">Go back</span>
         </div>
         <div style="padding: 0 20px;" @click="mxGohome">
@@ -38,7 +38,7 @@
                   </ul>
                 </nav>
                 <a href="#" id="tap-to-top" @click="clickToTop">
-                  <fa :icon="['fa', 'arrow-up']" />
+                  <fa icon="arrow-up" />
                 </a>
               </div>
             </div>

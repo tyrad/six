@@ -2,7 +2,7 @@
   <ul>
     <li class="directory" v-for="item of treeData" :key="item.folderName">
       <a href="#" data-role="directory">
-        <fa class="fa" :icon="['fa', 'angle-down']" />
+        <fa class="fa" icon="angle-down" />
         {{ item.folderName }}
       </a>
       <ul style="display: block;">

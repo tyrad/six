@@ -23,7 +23,7 @@
               </ul>
             </nav>
             <a href="#" id="tap-to-top">
-              <fa :icon="['fa', 'arrow-up']" />
+              <fa icon="arrow-up" />
             </a>
           </div>
         </div>

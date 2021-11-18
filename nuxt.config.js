@@ -26,11 +26,12 @@ export default {
     '@/assets/style/coder.scss',
     '@/assets/style/coder-dark.scss',
     '@/assets/style/custom.css',
+    '@fortawesome/fontawesome-svg-core/styles.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['@/plugins/filters.js',
-    { src: '@/plugins/fontAwesomeIcons.js', mode: 'client' }
+    '@/plugins/fontAwesomeIcons.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

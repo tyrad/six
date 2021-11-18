@@ -17,3 +17,5 @@ import {faArrowDown} from '@fortawesome/free-solid-svg-icons/faArrowDown'
 library.add(faAngleDown, faCalendarAlt, faLink, faArrowLeft, faArrowRight, faFolder, faArrowUp, faAdjust, faBars, faArrowDown)
 
 Vue.component('fa', FontAwesomeIcon)
+
+// refer to: https://stackoverflow.com/questions/59897864/nuxt-vendor-app-is-too-big-font-awesome-too-big

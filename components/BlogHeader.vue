@@ -5,13 +5,13 @@
         {{ siteName }}
       </NuxtLink>
       <span id="dark-mode-toggle" class="float-right" @click="darkModeChanged">
-        <fa :icon="['fas', 'adjust']" style="cursor: pointer;" />
+        <fa :icon="['fa', 'adjust']" style="cursor: pointer;" />
       </span>
 
       <!--  drop menu  -->
       <input type="checkbox" id="menu-toggle" />
       <label class="menu-button float-right" for="menu-toggle">
-        <fa :icon="['fas', 'bars']" />
+        <fa :icon="['fa', 'bars']" />
       </label>
 
       <ul class="navigation-list">
@@ -24,7 +24,7 @@
           <nuxt-link class="navigation-link"
                      :to="{name: item.path , params: item.params }"> {{ item.name }}
           </nuxt-link>
-          <fa :icon="['fas', 'angle-down']" v-if="item.children && item.children.length > 0" />
+          <fa :icon="['fa', 'angle-down']" v-if="item.children && item.children.length > 0" />
           <ul
             class="dropdown-content"
             v-if="item.children && item.children.length > 0"
@@ -34,7 +34,7 @@
                 <nuxt-link :to="{name: subItem.path, params: subItem.params}"> {{ subItem.name }}</nuxt-link>
               </div>
               <div v-else class="flex-align-center flex-y-center">
-                <fa class="out-icon" :icon="['fas', 'link']" />
+                <fa class="out-icon" :icon="['fa', 'link']" />
                 <a class="out-link" :href="subItem.path" target="_Blank"> {{ subItem.name }}</a>
               </div>
             </li>

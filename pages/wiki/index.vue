@@ -4,7 +4,7 @@
     <div class="wiki-category-aside" ref="aside">
       <div class="navigation">
         <div @click="mxGoBack">
-          <fa class="fa" :icon="['fas', 'arrow-left']" />
+          <fa class="fa" :icon="['fa', 'arrow-left']" />
           <span style="margin-left: 8px;">Go back</span>
         </div>
         <div style="padding: 0 10px;" @click="mxGohome">
@@ -40,7 +40,7 @@
               </li>
               <li class="pagelist" v-for="sub of item.children" :key="sub.folderName">
                 <span class="wiki-collection">
-                    <fa class="fa" :icon="['fas', 'folder']" />&nbsp;
+                    <fa class="fa" :icon="['fa', 'folder']" />&nbsp;
                     {{ sub.folderName }}
                 </span>
                 <ul>

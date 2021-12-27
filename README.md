@@ -70,6 +70,8 @@ More information about the usage of this directory in [the documentation](https:
 
 # 其他
 
+
+
 ```
 create-nuxt-app v3.7.1
 ✨  Generating Nuxt.js project in six
